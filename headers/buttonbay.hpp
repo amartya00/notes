@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 #include <unordered_map>
+#include <utility>
 
 #include <QWidget>
 #include <QPushButton>
@@ -23,12 +24,14 @@ namespace AppUI {
     class ButtonBay: public QHBoxLayout {
     private:
         std::unordered_map<QString, std::unique_ptr<QPushButton>> buttons;
-        std::unique_ptr<QSpacerItem> spacer;
+        // QSpacerItem (like any other QLayoutItem) is deleted by the layout itself. Hence no unique_ptr
+        // https://forum.qt.io/topic/64234/how-does-qspaceritem-get-deleted
+        QSpacerItem* spacer;
         
     public:
-        ButtonBay(QWidget* parent, const std::unordered_map<QString, ButtonInfo>& buttonLabels): 
-            QHBoxLayout(parent),
-            spacer {std::make_unique<QSpacerItem>(10, 10, QSizePolicy::Expanding)} {
+        ButtonBay(QWidget* parent, const std::vector<std::pair<QString, ButtonInfo>>& buttonLabels): 
+            QHBoxLayout(nullptr),
+            spacer {new QSpacerItem(10, 10, QSizePolicy::Expanding)} {
             for(const auto& label : buttonLabels) {
                 auto button {std::make_unique<QPushButton>(label.first, parent)};
                 button->setStyleSheet(label.second.css);
@@ -38,7 +41,7 @@ namespace AppUI {
                 addWidget(button.get());
                 buttons[label.first] = std::move(button);
             }
-            addSpacerItem(spacer.get());
+            addSpacerItem(spacer);
         }
         
         std::unique_ptr<QPushButton>& getButton(const QString& buttonLabel) {

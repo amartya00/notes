@@ -2,7 +2,8 @@
 #define __SIGABRT_NOTES__MAINWINDOW__
 
 #include <memory>
-#include <unordered_map>
+#include <map>
+#include <utility>
 
 #include <QWidget>
 #include <QGridLayout>
@@ -12,51 +13,55 @@
 #include <QFrame>
 #include <QPushButton>
 #include <QTextCursor>
+#include <QKeySequence>
 
 #include <buttonbay.hpp>
+#include <actionbay.hpp>
 #include <constants.hpp>
 #include <textbox.hpp>
 
 namespace AppUI {
     class MainWindow : public QWidget {
     private:
-        const std::size_t initWidth;
-        const std::size_t initHeight;
-        
         std::unique_ptr<QGridLayout> mainGrid;
         std::unique_ptr<AppUI::TextBox> textBox;
-        std::unique_ptr<AppUI::ButtonBay> buttonBay;
+        std::unique_ptr<AppUI::ActionBay> actionBay;
         
     public:
         MainWindow(const std::size_t initWidth, const std::size_t initHeight): 
-            initWidth {initWidth},
-            initHeight {initHeight},
             mainGrid {std::make_unique<QGridLayout>(this)},
             textBox {std::make_unique<AppUI::TextBox>(this)},
-            buttonBay {std::make_unique<AppUI::ButtonBay>(
+            actionBay {std::make_unique<AppUI::ActionBay>(
                 this,
-                std::unordered_map<QString, AppUI::ButtonInfo>{
+                std::vector<std::pair<QString, AppUI::ActionInfo>>{
                     {
-                        "save", 
-                        {
-                            AppUI::ButtonConstants::PLAIN_ROUNDED_CSS,
-                            ":/resources/images/save-button.png"
+                        "save",
+                        {   
+                            ":/resources/images/save-button.png",
+                            false,
+                            std::nullopt
                         }
                     }, 
                     {
                         "bold", 
                         {
-                            AppUI::ButtonConstants::PLAIN_ROUNDED_CSS,
-                            ":/resources/images/bold-button.png"
-                            
+                            ":/resources/images/bold-button.png",
+                            true,
+                            QKeySequence::Bold
                         }
+                        
                     }
                 }
                 
             )} {
-                connect(buttonBay->getButton("bold").get(), &QPushButton::clicked, textBox.get(), &AppUI::TextBox::boldSelection);
+                
+                connect(actionBay->getButton("bold").get(), &QAction::toggled, textBox.get(), &AppUI::TextBox::boldSelection);
+                //connect(buttonBay->getButton("h1").get(), &QPushButton::clicked, textBox.get(), &AppUI::TextBox::heading1Selection);
+                //connect(buttonBay->getButton("h2").get(), &QPushButton::clicked, textBox.get(), &AppUI::TextBox::heading2Selection);
+                //connect(buttonBay->getButton("save").get(), &QPushButton::clicked, textBox.get(), &AppUI::TextBox::printText);
+                //actionBay->getButton("bold")->connect(textBox->boldSelection);
                 mainGrid->addWidget(textBox.get(), 0, 0);
-                mainGrid->addLayout(buttonBay.get(), 1, 0);
+                mainGrid->addWidget(actionBay.get(), 1, 0);
                 setLayout(mainGrid.get());
                 this->setStyleSheet(AppUI::ButtonConstants::MAN_WINDOW_DARK_CSS);
                 this->resize(initWidth, initHeight);

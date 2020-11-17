@@ -1,10 +1,13 @@
 project('sigabrt.io.notes', 'cpp',
         license: 'GPLV2')
 
-qt5 = import('qt5')
-qt5_deps = dependency('qt5', modules: ['Core', 'Gui', 'Widgets'])
+add_global_arguments('--std=c++17', '-Werror', language : 'cpp')
+
 
 inc = include_directories('headers')
+
+qt5 = import('qt5')
+qt5_deps = dependency('qt5', modules: ['Core', 'Gui', 'Widgets'])
 
 preprocessed = qt5.preprocess(qresources: 'resources.qrc')
 

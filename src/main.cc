@@ -13,5 +13,8 @@ int main(int argc, char* argv[]) {
     window.setWindowTitle("Simple example");
     window.show();
 
-    return app.exec();
+    std::cout << "Start\n";
+    app.exec();
+    std::cout << "Stop\n";
+    
 }
