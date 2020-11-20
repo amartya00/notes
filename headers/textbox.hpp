@@ -2,6 +2,7 @@
 #define __SIGABRT_NOTES_TEXTBOX__
 
 #include <memory>
+#include <ios>
 #include <iostream>
 
 #include <QFont>
@@ -16,9 +17,6 @@
 
 namespace AppUI {
     class TextBox : public QTextEdit {
-    private:
-        
-        
     public:
         TextBox(QWidget* parent):
             QTextEdit(parent) {
@@ -27,11 +25,12 @@ namespace AppUI {
             setStyleSheet(AppUI::ButtonConstants::TEXT_EDIT_DARK_BG_CSS);
         }
         
-        void boldSelection(bool isSet) {
+        void boldSelection(bool isSet) {            
             QTextCursor cursor {textCursor()};
             QTextCharFormat bold;
             bold.setFontWeight(isSet ? QFont::Bold : QFont::Normal);
             cursor.mergeCharFormat(bold);
+            setFontWeight(isSet ? QFont::Bold : QFont::Normal);
         }
         
         void heading1Selection() {

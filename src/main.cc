@@ -12,9 +12,5 @@ int main(int argc, char* argv[]) {
     AppUI::MainWindow window {700, 500};
     window.setWindowTitle("Simple example");
     window.show();
-
-    std::cout << "Start\n";
     app.exec();
-    std::cout << "Stop\n";
-    
 }

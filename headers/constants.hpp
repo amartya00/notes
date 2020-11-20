@@ -1,9 +1,23 @@
 #ifndef __SIGABRT_NOTES__CONSTANTS__
 #define __SIGABRT_NOTES__CONSTANTS__
 
+#include <unordered_map>
+
 #include <QString>
+#include <QStringLiteral>
 
 namespace AppUI {
+    enum class Mode {
+        LIGHT, DARK
+    };
+    
+    namespace Colours {
+        const QString LIME {"#82ec00"};
+        const QString RED {"#ff0003"};
+        const QString GRAY {"#3E3E3E"};
+        const QString BLUE {"#2B78FE"};
+        const QString PINK {"#E61ACC"};
+    }
     namespace ButtonConstants {
         const QString LIME {"#82ec00"};
         const QString RED {"#ff0003"};
