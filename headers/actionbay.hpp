@@ -32,18 +32,23 @@ namespace AppUI {
         
         QString getCss() {
             return QString {
+                "QToolBar {background-color: " + AppUI::Colours::GRAY + "; border: none} "
                 "QToolButton {"
                 "height: 30px; "
                 "width: 30px; "
                 "margin-right: 8px; "
+                "qproperty-iconSize: 24px;"
                 "} "
                 "QToolButton:checked {"
-                
                 "border: 2px solid " + accent + "; "
                 "border-radius: 3px;"
                 "} "
                 "QToolButton:!checked {"
                 "border: 1px solid " + accent + "; "
+                "border-radius: 2px;"
+                "} "
+                "QToolButton:pressed {"
+                "border: 2px solid " + accent + "; "
                 "border-radius: 2px;"
                 "} "
             };
@@ -74,9 +79,11 @@ namespace AppUI {
         ActionBay(
             QWidget* parent, 
             const std::vector<std::pair<QString, ActionInfo>>& buttonLabels,
-            AppUI::Mode mode,
-            const QString& accent
-        ): mode {mode}, accent {accent} {
+            AppUI::Mode mode
+        ): mode {mode} {
+            // Set accent according to mode
+            accent = mode == AppUI::Mode::DARK? AppUI::Colours::WHITE : AppUI::Colours::BLACK;
+
             // Populate the button map
             for(const auto& label : buttonLabels) {
                 Action action {

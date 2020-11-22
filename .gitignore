@@ -3,3 +3,5 @@ _build/
 build/
 notes.kdev4
 *~
+*.DS_Store
+*.vscode/

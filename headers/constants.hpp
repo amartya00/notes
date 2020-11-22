@@ -17,6 +17,8 @@ namespace AppUI {
         const QString GRAY {"#3E3E3E"};
         const QString BLUE {"#2B78FE"};
         const QString PINK {"#E61ACC"};
+        const QString WHITE {"#FFFFFF"};
+        const QString BLACK {"#000000"};
     }
     namespace ButtonConstants {
         const QString LIME {"#82ec00"};

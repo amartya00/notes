@@ -1,17 +1,13 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
-    <!-- Dark icons-->
-    <file>resources/images/round_format_bold_black_18dp.png</file>
-    <file>resources/images/round_format_italic_black_18dp.png</file>
-    <file>resources/images/round_lock_black_18dp.png</file>
-    <file>resources/images/round_note_add_black_18dp.png</file>
-    <file>resources/images/round_save_black_18dp.png</file>
+    <!-- Light mode icons -->
+    <file>resources/images/format_bold-black-180dp.png</file>
+    <file>resources/images/format_italic-black-180dp.png</file>
+    <file>resources/images/save-black-180dp.png</file>
     
-    <!-- Light icons-->
-    <file>resources/images/round_format_bold_white_18dp.png</file>
-    <file>resources/images/round_format_italic_white_18dp.png</file>
-    <file>resources/images/round_lock_white_18dp.png</file>
-    <file>resources/images/round_note_add_white_18dp.png</file>
-    <file>resources/images/round_save_white_18dp.png</file>
+    <!-- Dark mode icons-->
+    <file>resources/images/format_bold-white-180dp.png</file>
+    <file>resources/images/format_italic-white-180dp.png</file>
+    <file>resources/images/save-white-180dp.png</file>
 </qresource>
 </RCC>

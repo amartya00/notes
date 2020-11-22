@@ -27,8 +27,8 @@ namespace AppUI {
             {
                 "bold",
                 {
-                    ":/resources/images/round_format_bold_black_18dp.png",
-                    ":/resources/images/round_format_bold_white_18dp.png",
+                    ":/resources/images/format_bold-black-180dp.png",
+                    ":/resources/images/format_bold-white-180dp.png",
                     true,
                     QKeySequence::Bold
                 }
@@ -36,26 +36,17 @@ namespace AppUI {
             {
                 "italics",
                 {
-                    ":/resources/images/round_format_italic_black_18dp.png",
-                    ":/resources/images/round_format_italic_white_18dp.png",
+                    ":/resources/images/format_italic-black-180dp.png",
+                    ":/resources/images/format_italic-white-180dp.png",
                     true,
                     QKeySequence::Italic
                 }
             },
             {
-                "lock",
-                {
-                    ":/resources/images/round_lock_black_18dp.png",
-                    ":/resources/images/round_lock_white_18dp.png",
-                    true,
-                    std::nullopt
-                }
-            },
-            {
                 "save",
                 {
-                    ":/resources/images/round_save_black_18dp.png",
-                    ":/resources/images/round_save_white_18dp.png",
+                    ":/resources/images/save-black-180dp.png",
+                    ":/resources/images/save-white-180dp.png",
                     false,
                     QKeySequence::Save
                 }
@@ -70,7 +61,7 @@ namespace AppUI {
         MainWindow(const std::size_t initWidth, const std::size_t initHeight): 
             mainGrid {std::make_unique<QGridLayout>(this)},
             textBox {std::make_unique<AppUI::TextBox>(this)},
-            actionBay {std::make_unique<AppUI::ActionBay>(this, toolbar, AppUI::Mode::DARK, AppUI::Colours::PINK)} {
+            actionBay {std::make_unique<AppUI::ActionBay>(this, toolbar, AppUI::Mode::DARK)} {
                 connect(actionBay->getButton("bold").get(), &QAction::toggled, textBox.get(), &AppUI::TextBox::boldSelection);
                 //\connect(buttonBay->getButton("h1").get(), &QPushButton::clicked, textBox.get(), &AppUI::TextBox::heading1Selection);
                 //connect(buttonBay->getButton("h2").get(), &QPushButton::clicked, textBox.get(), &AppUI::TextBox::heading2Selection);
