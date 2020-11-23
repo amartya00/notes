@@ -89,6 +89,7 @@ namespace AppUI {
         }
         
         void printText() {
+            std::cout << "Save\n";
             std::cout << this->toHtml().toStdString();
         }
     };

@@ -120,7 +120,7 @@ namespace AppUI {
                     }
                     textBox->heading3Selection(isSet);
                 });
-            connect(actionBay->getButton("save").get(), &QAction::toggled, textBox.get(), &AppUI::TextBox::printText);
+            connect(actionBay->getButton("save").get(), &QAction::triggered, textBox.get(), &AppUI::TextBox::printText);
         }
 
     public:
