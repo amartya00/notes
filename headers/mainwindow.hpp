@@ -79,7 +79,7 @@ namespace AppUI {
                 }
             },
         };
-        
+
         std::unique_ptr<QGridLayout> mainGrid;
         std::unique_ptr<AppUI::TextBox> textBox;
         std::unique_ptr<AppUI::ActionBay> actionBay;
@@ -87,12 +87,42 @@ namespace AppUI {
         void connectTextBoxToolbar() {
             connect(actionBay->getButton("bold").get(), &QAction::toggled, textBox.get(), &AppUI::TextBox::boldSelection);
             connect(actionBay->getButton("italics").get(), &QAction::toggled, textBox.get(), &AppUI::TextBox::italicsSelection);
-            connect(actionBay->getButton("h1").get(), &QAction::toggled, textBox.get(), &AppUI::TextBox::heading1Selection);
-            connect(actionBay->getButton("h2").get(), &QAction::toggled, textBox.get(), &AppUI::TextBox::heading2Selection);
-            connect(actionBay->getButton("h3").get(), &QAction::toggled, textBox.get(), &AppUI::TextBox::heading3Selection);
+            connect(
+                actionBay->getButton("h1").get(), 
+                &QAction::toggled, 
+                textBox.get(),
+                [this](bool isSet) {
+                    if (isSet) {
+                        actionBay->getButton("h2")->setChecked(false);
+                        actionBay->getButton("h3")->setChecked(false);
+                    }
+                    textBox->heading1Selection(isSet);
+                });
+            connect(
+                actionBay->getButton("h2").get(), 
+                &QAction::toggled, 
+                textBox.get(),
+                [this](bool isSet) {
+                    if (isSet) {
+                        actionBay->getButton("h1")->setChecked(false);
+                        actionBay->getButton("h3")->setChecked(false);
+                    }
+                    textBox->heading2Selection(isSet);
+                });
+            connect(
+                actionBay->getButton("h3").get(), 
+                &QAction::toggled, 
+                textBox.get(),
+                [this](bool isSet) {
+                    if (isSet) {
+                        actionBay->getButton("h1")->setChecked(false);
+                        actionBay->getButton("h2")->setChecked(false);
+                    }
+                    textBox->heading3Selection(isSet);
+                });
             connect(actionBay->getButton("save").get(), &QAction::toggled, textBox.get(), &AppUI::TextBox::printText);
         }
-        
+
     public:
         MainWindow(const std::size_t initWidth, const std::size_t initHeight): 
             mainGrid {std::make_unique<QGridLayout>(this)},
@@ -100,7 +130,7 @@ namespace AppUI {
             actionBay {std::make_unique<AppUI::ActionBay>(this, toolbar, AppUI::Mode::DARK)} {
                 
                 connectTextBoxToolbar();
-                
+
                 mainGrid->addWidget(textBox.get(), 0, 0);
                 mainGrid->addWidget(actionBay.get(), 1, 0);
                 setLayout(mainGrid.get());

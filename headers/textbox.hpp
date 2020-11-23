@@ -17,6 +17,11 @@
 
 namespace AppUI {
     class TextBox : public QTextEdit {
+    private:
+        static const int H1_SIZE = 32;
+        static const int H2_SIZE = 26;
+        static const int H3_SIZE = 20;
+        static const int P_SIZE = 15;
     public:
         TextBox(QWidget* parent):
             QTextEdit(parent) {
@@ -46,9 +51,13 @@ namespace AppUI {
             cursor.beginEditBlock();
             cursor.movePosition(QTextCursor::StartOfBlock);
             cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-            QString txt {cursor.selectedText()};
-            isSet? cursor.insertHtml("<h1> " + txt + " </h1>") : cursor.insertHtml("<p> " + txt + " </p>");
+
+            QTextCharFormat bold;
+            bold.setFontPointSize(isSet ? H1_SIZE : P_SIZE);
+            cursor.mergeCharFormat(bold);
+
             cursor.endEditBlock();
+            setFontPointSize(isSet ? H1_SIZE : P_SIZE);
         }
         
         void heading2Selection(bool isSet) {
@@ -56,9 +65,13 @@ namespace AppUI {
             cursor.beginEditBlock();
             cursor.movePosition(QTextCursor::StartOfBlock);
             cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-            QString txt {cursor.selectedText()};
-            isSet? cursor.insertHtml("<h2> " + txt + " </h2>") : cursor.insertHtml("<p> " + txt + " </p>");
+
+            QTextCharFormat bold;
+            bold.setFontPointSize(isSet ? H2_SIZE : P_SIZE);
+            cursor.mergeCharFormat(bold);
+
             cursor.endEditBlock();
+            setFontPointSize(isSet ? H2_SIZE : P_SIZE);
         }
 
         void heading3Selection(bool isSet) {
@@ -66,15 +79,17 @@ namespace AppUI {
             cursor.beginEditBlock();
             cursor.movePosition(QTextCursor::StartOfBlock);
             cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-            QString txt {cursor.selectedText()};
-            isSet? cursor.insertHtml("<h3> " + txt + " </h3>") : cursor.insertHtml("<p> " + txt + " </p>");
+
+            QTextCharFormat bold;
+            bold.setFontPointSize(isSet ? H3_SIZE : P_SIZE);
+            cursor.mergeCharFormat(bold);
+
             cursor.endEditBlock();
+            setFontPointSize(isSet ? H3_SIZE : P_SIZE);
         }
         
         void printText() {
-            std::cout << "-------------------------\n";
             std::cout << this->toHtml().toStdString();
-            std::cout << "-------------------------\n\n";
         }
     };
 }
