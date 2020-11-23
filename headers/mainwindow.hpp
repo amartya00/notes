@@ -43,6 +43,33 @@ namespace AppUI {
                 }
             },
             {
+                "h1",
+                {
+                    ":/resources/images/format_h1-black-180dp.png",
+                    ":/resources/images/format_h1-white-180dp.png",
+                    true,
+                    std::nullopt
+                }
+            },
+            {
+                "h2",
+                {
+                    ":/resources/images/format_h2-black-180dp.png",
+                    ":/resources/images/format_h2-white-180dp.png",
+                    true,
+                    std::nullopt
+                }
+            },
+            {
+                "h3",
+                {
+                    ":/resources/images/format_h3-black-180dp.png",
+                    ":/resources/images/format_h3-white-180dp.png",
+                    true,
+                    std::nullopt
+                }
+            },
+            {
                 "save",
                 {
                     ":/resources/images/save-black-180dp.png",
@@ -50,23 +77,30 @@ namespace AppUI {
                     false,
                     QKeySequence::Save
                 }
-            }
+            },
         };
         
         std::unique_ptr<QGridLayout> mainGrid;
         std::unique_ptr<AppUI::TextBox> textBox;
         std::unique_ptr<AppUI::ActionBay> actionBay;
+
+        void connectTextBoxToolbar() {
+            connect(actionBay->getButton("bold").get(), &QAction::toggled, textBox.get(), &AppUI::TextBox::boldSelection);
+            connect(actionBay->getButton("italics").get(), &QAction::toggled, textBox.get(), &AppUI::TextBox::italicsSelection);
+            connect(actionBay->getButton("h1").get(), &QAction::toggled, textBox.get(), &AppUI::TextBox::heading1Selection);
+            connect(actionBay->getButton("h2").get(), &QAction::toggled, textBox.get(), &AppUI::TextBox::heading2Selection);
+            connect(actionBay->getButton("h3").get(), &QAction::toggled, textBox.get(), &AppUI::TextBox::heading3Selection);
+            connect(actionBay->getButton("save").get(), &QAction::toggled, textBox.get(), &AppUI::TextBox::printText);
+        }
         
     public:
         MainWindow(const std::size_t initWidth, const std::size_t initHeight): 
             mainGrid {std::make_unique<QGridLayout>(this)},
             textBox {std::make_unique<AppUI::TextBox>(this)},
             actionBay {std::make_unique<AppUI::ActionBay>(this, toolbar, AppUI::Mode::DARK)} {
-                connect(actionBay->getButton("bold").get(), &QAction::toggled, textBox.get(), &AppUI::TextBox::boldSelection);
-                //\connect(buttonBay->getButton("h1").get(), &QPushButton::clicked, textBox.get(), &AppUI::TextBox::heading1Selection);
-                //connect(buttonBay->getButton("h2").get(), &QPushButton::clicked, textBox.get(), &AppUI::TextBox::heading2Selection);
-                //connect(buttonBay->getButton("save").get(), &QPushButton::clicked, textBox.get(), &AppUI::TextBox::printText);
-                //actionBay->getButton("bold")->connect(textBox->boldSelection);
+                
+                connectTextBoxToolbar();
+                
                 mainGrid->addWidget(textBox.get(), 0, 0);
                 mainGrid->addWidget(actionBay.get(), 1, 0);
                 setLayout(mainGrid.get());

@@ -32,24 +32,42 @@ namespace AppUI {
             cursor.mergeCharFormat(bold);
             setFontWeight(isSet ? QFont::Bold : QFont::Normal);
         }
+
+        void italicsSelection(bool isSet) {            
+            QTextCursor cursor {textCursor()};
+            QTextCharFormat bold;
+            bold.setFontWeight(isSet ? QFont::StyleItalic : QFont::Normal);
+            cursor.mergeCharFormat(bold);
+            setFontWeight(isSet ? QFont::Bold : QFont::Normal);
+        }
         
-        void heading1Selection() {
+        void heading1Selection(bool isSet) {
             QTextCursor cursor {textCursor()};
             cursor.beginEditBlock();
             cursor.movePosition(QTextCursor::StartOfBlock);
             cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
             QString txt {cursor.selectedText()};
-            cursor.insertHtml("<h1> " + txt + " </h1>");
+            isSet? cursor.insertHtml("<h1> " + txt + " </h1>") : cursor.insertHtml("<p> " + txt + " </p>");
             cursor.endEditBlock();
         }
         
-        void heading2Selection() {
+        void heading2Selection(bool isSet) {
             QTextCursor cursor {textCursor()};
             cursor.beginEditBlock();
             cursor.movePosition(QTextCursor::StartOfBlock);
             cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
             QString txt {cursor.selectedText()};
-            cursor.insertHtml("<h2> " + txt + " </h2>");
+            isSet? cursor.insertHtml("<h2> " + txt + " </h2>") : cursor.insertHtml("<p> " + txt + " </p>");
+            cursor.endEditBlock();
+        }
+
+        void heading3Selection(bool isSet) {
+            QTextCursor cursor {textCursor()};
+            cursor.beginEditBlock();
+            cursor.movePosition(QTextCursor::StartOfBlock);
+            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+            QString txt {cursor.selectedText()};
+            isSet? cursor.insertHtml("<h3> " + txt + " </h3>") : cursor.insertHtml("<p> " + txt + " </p>");
             cursor.endEditBlock();
         }
         
