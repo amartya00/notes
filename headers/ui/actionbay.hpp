@@ -9,7 +9,7 @@
 #include <QToolBar>
 #include <QKeySequence>
 
-#include <constants.hpp>
+#include <ui/constants.hpp>
 
 namespace AppUI {
     struct ActionInfo {

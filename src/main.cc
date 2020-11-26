@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QIcon>
 
-#include <mainwindow.hpp>
+#include <ui/mainwindow.hpp>
 
 int main(int argc, char* argv[]) {
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);

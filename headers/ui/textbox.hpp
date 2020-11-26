@@ -13,7 +13,7 @@
 #include <QSizePolicy>
 #include <QToolBar>
 
-#include <constants.hpp>
+#include <ui/constants.hpp>
 
 namespace AppUI {
     class TextBox : public QTextEdit {
@@ -28,6 +28,7 @@ namespace AppUI {
             setAcceptRichText(true);
             setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
             setStyleSheet(AppUI::ButtonConstants::TEXT_EDIT_DARK_BG_CSS);
+            setFontPointSize(P_SIZE);
         }
         
         void boldSelection(bool isSet) {            
@@ -41,9 +42,16 @@ namespace AppUI {
         void italicsSelection(bool isSet) {            
             QTextCursor cursor {textCursor()};
             QTextCharFormat bold;
-            bold.setFontWeight(isSet ? QFont::StyleItalic : QFont::Normal);
+            bold.setFontItalic(isSet);
             cursor.mergeCharFormat(bold);
-            setFontWeight(isSet ? QFont::Bold : QFont::Normal);
+            setFontItalic(isSet);
+        }
+        void underlineSelection(bool isSet) {            
+            QTextCursor cursor {textCursor()};
+            QTextCharFormat bold;
+            bold.setFontUnderline(isSet);
+            cursor.mergeCharFormat(bold);
+            setFontUnderline(isSet);
         }
         
         void heading1Selection(bool isSet) {
@@ -86,6 +94,20 @@ namespace AppUI {
 
             cursor.endEditBlock();
             setFontPointSize(isSet ? H3_SIZE : P_SIZE);
+        }
+        
+        void pSelection() {
+            QTextCursor cursor {textCursor()};
+            cursor.beginEditBlock();
+            cursor.movePosition(QTextCursor::StartOfBlock);
+            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+
+            QTextCharFormat bold;
+            bold.setFontPointSize(P_SIZE);
+            cursor.mergeCharFormat(bold);
+
+            cursor.endEditBlock();
+            setFontPointSize(P_SIZE);
         }
         
         void printText() {

@@ -15,10 +15,10 @@
 #include <QTextCursor>
 #include <QKeySequence>
 
-#include <buttonbay.hpp>
-#include <actionbay.hpp>
-#include <constants.hpp>
-#include <textbox.hpp>
+#include <ui/buttonbay.hpp>
+#include <ui/actionbay.hpp>
+#include <ui/constants.hpp>
+#include <ui/textbox.hpp>
 
 namespace AppUI {
     class MainWindow : public QWidget {
@@ -40,6 +40,15 @@ namespace AppUI {
                     ":/resources/images/format_italic-white-180dp.png",
                     true,
                     QKeySequence::Italic
+                }
+            },
+            {
+                "underline",
+                {
+                    ":/resources/images/format_underlined-black-180dp.png",
+                    ":/resources/images/format_underlined-white-180dp.png",
+                    true,
+                    QKeySequence::Underline
                 }
             },
             {
@@ -70,6 +79,15 @@ namespace AppUI {
                 }
             },
             {
+                "p",
+                {
+                    ":/resources/images/format_p-black-180dp.png",
+                    ":/resources/images/format_p-white-180dp.png",
+                    true,
+                    std::nullopt
+                }
+            },
+            {
                 "save",
                 {
                     ":/resources/images/save-black-180dp.png",
@@ -87,6 +105,7 @@ namespace AppUI {
         void connectTextBoxToolbar() {
             connect(actionBay->getButton("bold").get(), &QAction::toggled, textBox.get(), &AppUI::TextBox::boldSelection);
             connect(actionBay->getButton("italics").get(), &QAction::toggled, textBox.get(), &AppUI::TextBox::italicsSelection);
+            connect(actionBay->getButton("underline").get(), &QAction::toggled, textBox.get(), &AppUI::TextBox::underlineSelection);
             connect(
                 actionBay->getButton("h1").get(), 
                 &QAction::toggled, 
@@ -95,6 +114,7 @@ namespace AppUI {
                     if (isSet) {
                         actionBay->getButton("h2")->setChecked(false);
                         actionBay->getButton("h3")->setChecked(false);
+                        actionBay->getButton("p")->setChecked(false);
                     }
                     textBox->heading1Selection(isSet);
                 });
@@ -106,6 +126,7 @@ namespace AppUI {
                     if (isSet) {
                         actionBay->getButton("h1")->setChecked(false);
                         actionBay->getButton("h3")->setChecked(false);
+                        actionBay->getButton("p")->setChecked(false);
                     }
                     textBox->heading2Selection(isSet);
                 });
@@ -117,6 +138,19 @@ namespace AppUI {
                     if (isSet) {
                         actionBay->getButton("h1")->setChecked(false);
                         actionBay->getButton("h2")->setChecked(false);
+                        actionBay->getButton("p")->setChecked(false);
+                    }
+                    textBox->heading3Selection(isSet);
+                });
+            connect(
+                actionBay->getButton("p").get(), 
+                &QAction::toggled, 
+                textBox.get(),
+                [this](bool isSet) {
+                    if (isSet) {
+                        actionBay->getButton("h1")->setChecked(false);
+                        actionBay->getButton("h2")->setChecked(false);
+                        actionBay->getButton("h3")->setChecked(false);
                     }
                     textBox->heading3Selection(isSet);
                 });
