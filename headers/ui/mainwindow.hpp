@@ -4,6 +4,7 @@
 #include <memory>
 #include <map>
 #include <utility>
+#include <random>
 
 #include <QWidget>
 #include <QGridLayout>
@@ -19,6 +20,8 @@
 #include <ui/actionbay.hpp>
 #include <ui/constants.hpp>
 #include <ui/textbox.hpp>
+
+#include <backend/notesdao.hpp>
 
 namespace AppUI {
     class MainWindow : public QWidget {
@@ -101,6 +104,13 @@ namespace AppUI {
         std::unique_ptr<QGridLayout> mainGrid;
         std::unique_ptr<AppUI::TextBox> textBox;
         std::unique_ptr<AppUI::ActionBay> actionBay;
+        
+        long genRandomId(){
+            std::random_device rd;     
+            std::mt19937_64 eng(rd()); 
+            std::uniform_int_distribution<long> distr;
+            return distr(eng);
+        }
 
         void connectTextBoxToolbar() {
             connect(actionBay->getButton("bold").get(), &QAction::toggled, textBox.get(), &AppUI::TextBox::boldSelection);
@@ -154,16 +164,32 @@ namespace AppUI {
                     }
                     textBox->heading3Selection(isSet);
                 });
-            connect(actionBay->getButton("save").get(), &QAction::triggered, textBox.get(), &AppUI::TextBox::printText);
+            connect(actionBay->getButton("save").get(), &QAction::triggered, textBox.get(), &AppUI::TextBox::save);
         }
 
     public:
-        MainWindow(const std::size_t initWidth, const std::size_t initHeight): 
+        MainWindow(const std::size_t initWidth, const std::size_t initHeight, AppBackend::LocalDAO& dao): 
             mainGrid {std::make_unique<QGridLayout>(this)},
-            textBox {std::make_unique<AppUI::TextBox>(this)},
+            textBox {std::make_unique<AppUI::TextBox>(this, dao)},
             actionBay {std::make_unique<AppUI::ActionBay>(this, toolbar, AppUI::Mode::DARK)} {
                 
                 connectTextBoxToolbar();
+                
+                // Set up the textbox with the first notes
+                const std::vector<long>& ids {dao.listRecords()};
+                if (ids.size() == 0) {
+                    qWarning() << "Empty database. Initializing with a new note\n";
+                    AppBackend::Note firstNote {
+                        genRandomId(),
+                        "Untitled note",
+                        "Untitled note\n"
+                    };
+                    dao.upsertRecord(firstNote);
+                    textBox->refreshContent(firstNote.id);
+                } else {
+                    AppBackend::Note firstNote {*dao.loadRecord(ids[0])};
+                    textBox->refreshContent(firstNote.id);
+                }
 
                 mainGrid->addWidget(textBox.get(), 0, 0);
                 mainGrid->addWidget(actionBay.get(), 1, 0);
