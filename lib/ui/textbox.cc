@@ -16,6 +16,19 @@
 #include <backend/notesdao.hpp>
 #include <backend/models.hpp>
 
+AppUI::TextBox::TextBox(QWidget* parent, AppBackend::LocalDAO& dao):
+    QTextEdit(parent),
+    dao {dao} {
+    setAcceptRichText(true);
+    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    setStyleSheet(AppUI::ButtonConstants::TEXT_EDIT_DARK_BG_CSS);
+    setFontPointSize(P_SIZE);
+}
+
+AppUI::TextBox::~TextBox() {
+    save();
+}
+
 QString AppUI::TextBox::extractTitle() const {
     QString text = toPlainText().trimmed();
     if(text == 0) {
@@ -28,15 +41,6 @@ QString AppUI::TextBox::extractTitle() const {
         int titleLen = firstSentenceLen < firstParaLen ? firstSentenceLen : firstParaLen;
         return (titleLen > 0 && titleLen < 50) ? text.left(titleLen) : text.left(50);
     }
-}
-
-AppUI::TextBox::TextBox(QWidget* parent, AppBackend::LocalDAO& dao):
-    QTextEdit(parent),
-    dao {dao} {
-    setAcceptRichText(true);
-    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-    setStyleSheet(AppUI::ButtonConstants::TEXT_EDIT_DARK_BG_CSS);
-    setFontPointSize(P_SIZE);
 }
 
 void AppUI::TextBox::boldSelection(bool isSet) {            
@@ -140,5 +144,22 @@ void AppUI::TextBox::refreshContent(const long newNoteId) {
     } else {
         setText((*note).body);
         update();
+    }
+}
+
+void AppUI::TextBox::resetView() {
+    const std::vector<long>& ids {dao.listRecords()};
+    if (ids.size() == 0) {
+        // If there are no existing notes
+        // Generate an emoty one
+        qWarning() << "No existing notes. Creating an empty one.";
+        currentNoteId = dao.genRandomId();
+        setText("Untitled Note");
+        save();
+    } else {
+        // Invalidate current note as it has been deleted or is uninitialized.
+        // Then refresh the view to the first item in the note.
+        currentNoteId = std::nullopt;
+        refreshContent(ids[0]);
     }
 }

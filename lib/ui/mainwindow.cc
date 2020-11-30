@@ -92,6 +92,7 @@ void AppUI::MainWindow::connectTextBoxToolbar() {
             dao.upsertRecord(note);
             textBox->refreshContent(note.id);
             noteList->updateView();
+            noteList->selectLast();
         });
     connect(
         noteList.get(), 
@@ -100,6 +101,14 @@ void AppUI::MainWindow::connectTextBoxToolbar() {
         [this](const QListWidgetItem* itm) {
             const AppUI::NoteListItem* listItm {reinterpret_cast<const AppUI::NoteListItem*>(itm)};
             textBox->refreshContent(listItm->id);
+        });
+    connect(
+        listActionBay->getButton("delete").get(),
+        &QAction::triggered, 
+        textBox.get(),
+        [this]() {
+            noteList->deleteSelected();
+            textBox->resetView();
         });
 }
 
@@ -126,23 +135,14 @@ AppUI::MainWindow::MainWindow(const std::size_t initWidth, const std::size_t ini
     mainGrid {std::make_unique<QGridLayout>(this)},
     textBox {std::make_unique<AppUI::TextBox>(this, dao)},
     actionBay {std::make_unique<AppUI::ActionBay>(this, toolbar, AppUI::Mode::DARK)},
-    noteList {std::make_unique<AppUI::ItemList>(this, dao, AppUI::Mode::DARK)},
+    noteList {std::make_unique<AppUI::ItemList>(this, dao, AppUI::Colours::DARK_PINK)},
     listActionBay {std::make_unique<AppUI::ActionBay>(this, listToolbar, AppUI::Mode::DARK)} {
     
         connectTextBoxToolbar();
         
-        // Set up the textbox with the first notes
-        const std::vector<long>& ids {dao.listRecords()};
-        if (ids.size() == 0) {
-            qWarning() << "Empty database. Initializing with a new note\n";
-            AppBackend::Note firstNote {newNote()};
-            dao.upsertRecord(firstNote);
-            textBox->refreshContent(firstNote.id);
-            noteList->updateView();
-        } else {
-            AppBackend::Note firstNote {*dao.loadRecord(ids[0])};
-            textBox->refreshContent(firstNote.id);
-        }
+        textBox->resetView();
+        noteList->updateView();
+        noteList->selectFirst();
 
         mainGrid->addWidget(noteList.get(), 0, 0);
         mainGrid->addWidget(listActionBay.get(), 1, 0);

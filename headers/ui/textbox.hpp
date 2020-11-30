@@ -27,6 +27,7 @@ namespace AppUI {
 
     public:
         TextBox(QWidget* parent, AppBackend::LocalDAO& dao);
+        ~TextBox();
         void boldSelection(bool isSet);
         void italicsSelection(bool isSet);
         void underlineSelection(bool isSet);
@@ -36,6 +37,7 @@ namespace AppUI {
         void pSelection();
         void save();
         void refreshContent(const long newNoteId);
+        void resetView();
     };
 }
 

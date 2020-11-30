@@ -57,7 +57,7 @@ void AppBackend::LocalDAO::initCache() {
 }
 
 
-bool AppBackend::LocalDAO::upsertRecord(const AppBackend::Note& note) {
+void AppBackend::LocalDAO::upsertRecord(const AppBackend::Note& note) {
     std::lock_guard<std::shared_mutex> writerLock(lock);
     // Write through to the backing store
     QSqlQuery query;
@@ -77,7 +77,6 @@ bool AppBackend::LocalDAO::upsertRecord(const AppBackend::Note& note) {
     if (std::find(noteIdList.begin(), noteIdList.end(), note.id) == noteIdList.end()) {
         noteIdList.push_back(note.id);
     }
-    return true;
 }
 
 const std::optional<AppBackend::Note> AppBackend::LocalDAO::loadRecord(const long id) const {
@@ -102,10 +101,24 @@ long AppBackend::LocalDAO::genRandomId() const noexcept {
     return retval;
 }
 
-long AppBackend::LocalDAO::genRandomId() noexcept {
-    std::random_device rd;     
-    std::mt19937_64 eng(rd()); 
-    std::uniform_int_distribution<long> distr;
-    long retval {distr(eng)};
-    return retval;
+void AppBackend::LocalDAO::deleteRecord(const long id) {
+    std::lock_guard<std::shared_mutex> writerLock(lock);
+    // Delete from the SQL database first
+    QSqlQuery query;
+    query.prepare(NotesTable::DELETE_NOTE_SQL_STRING);
+    query.bindValue(":id", QVariant::fromValue(id));
+    
+    if(!query.exec()) {
+        qWarning() << "Failed to insert query with id " << id << " because " << query.lastError().text();
+        throw std::runtime_error("Failed to delete query.");
+    }
+
+    // Delete entry from cache
+    noteMap.erase(id);
+    
+    // Insert the ID if needed
+    auto pos {std::find(noteIdList.begin(), noteIdList.end(), id)};
+    if (pos != noteIdList.end()) {
+        noteIdList.erase(pos);
+    }
 }

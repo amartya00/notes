@@ -16,7 +16,7 @@ namespace AppUI {
         const QString RED {"#ff0003"};
         const QString GRAY {"#3E3E3E"};
         const QString BLUE {"#2B78FE"};
-        const QString PINK {"#E61ACC"};
+        const QString DARK_PINK {"#9D2689"};
         const QString WHITE {"#FFFFFF"};
         const QString BLACK {"#000000"};
     }
@@ -41,7 +41,7 @@ namespace AppUI {
             "font-size: 13px; "
         };
         
-        const QString MAN_WINDOW_DARK_CSS {"background: #3E3E3E; color: white"};
+        const QString MAN_WINDOW_DARK_CSS {"background: #3E3E3E; color: white; padding-left: 0px; margin-left: 0px;"};
         const QString TEXT_EDIT_DARK_BG_CSS {"background: #2E2F30; font-size: 15px; border: 1px solid black; border-radius: 3px;"};
     }
     

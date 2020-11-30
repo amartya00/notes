@@ -108,7 +108,16 @@ namespace AppUI {
                     ":/resources/images/fnote_add-black-180dp.png",
                     ":/resources/images/note_add-white-180dp.png",
                     false,
-                    QKeySequence::Bold
+                    QKeySequence::New
+                }
+            },
+            {
+                "delete",
+                {
+                    ":/resources/images/delete-black-180dp.png",
+                    ":/resources/images/delete-white-180dp.png",
+                    false,
+                    QKeySequence::Delete
                 }
             }
         };

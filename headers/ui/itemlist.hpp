@@ -33,35 +33,56 @@ namespace AppUI {
                 "QListWidget::item {"
                 "height: 50px;"
                 "width: 195px;"
-                "border: 1px solid ; "
-                "border-radius: 3px;"
-                "margin-bottom: 5px;"
-                "padding-left: 3px;"
+                "border-bottom: 1px solid ; "
+                "padding-bottom: 3px;"
                 "}"
                 "QListWidget::item:selected {"
-                "border: 2px solid " + accent + ";"
+                "border-bottom: 3px solid " + accent + ";"
+                "color: " + accent + ";"
                 "}"
             };
         }
         
     public :
-        ItemList(QWidget* parent, AppBackend::LocalDAO& dao, const AppUI::Mode& mode): 
+        ItemList(QWidget* parent, AppBackend::LocalDAO& dao, const QString accent): 
             QListWidget(parent),
+            accent {accent},
             dao {dao} {
-            accent = mode == AppUI::Mode::DARK? AppUI::Colours::WHITE : AppUI::Colours::GRAY;
+            //accent = mode == AppUI::Mode::DARK? AppUI::Colours::WHITE : AppUI::Colours::GRAY;
             setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
             setStyleSheet(getCss());
-            updateView();
         }
         
         void updateView() {
+            int current = currentRow();
             clear();
             const std::vector<long>& items {dao.listRecords()};
             for (auto id : items) {
                 AppBackend::Note note {std::move(*dao.loadRecord(id))};
                 addItem(new AppUI::NoteListItem(note.id, note.title));
             }
+            setCurrentRow(current);
             update();
+        }
+
+        void selectFirst() {
+            setCurrentRow(0);
+            update();
+        }
+
+        void selectLast() {
+            setCurrentRow(count()-1);
+            update();
+        }
+
+        void deleteSelected() {
+            for (const QListWidgetItem* current : selectedItems()) {
+                const AppUI::NoteListItem* itm {reinterpret_cast<const AppUI::NoteListItem*>(current)};
+                long id {itm->id};
+                dao.deleteRecord(id);
+            }
+            updateView();
+            selectFirst();
         }
     };
 }

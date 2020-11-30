@@ -40,6 +40,10 @@ namespace AppBackend {
             ");"  
         };
         const QString SELCT_ALL_SQL_STRING {"SELECT id,title,body FROM notes"};
+        const QString DELETE_NOTE_SQL_STRING {
+            "DELETE FROM notes WHERE "
+            "  id = :id"
+        };
     }
     
     class LocalDAO {
@@ -54,11 +58,11 @@ namespace AppBackend {
 
     public:
         LocalDAO(const QSqlDatabase& database);
-        bool upsertRecord(const AppBackend::Note&);
+        void upsertRecord(const AppBackend::Note&);
         const std::optional<AppBackend::Note> loadRecord(const long) const;
         const std::vector<long>& listRecords() const;
         long genRandomId() const noexcept;
-        long genRandomId() noexcept;
+        void deleteRecord(const long id);
     };
 }
 
