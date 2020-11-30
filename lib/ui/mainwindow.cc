@@ -135,7 +135,7 @@ AppUI::MainWindow::MainWindow(const std::size_t initWidth, const std::size_t ini
     mainGrid {std::make_unique<QGridLayout>(this)},
     textBox {std::make_unique<AppUI::TextBox>(this, dao)},
     actionBay {std::make_unique<AppUI::ActionBay>(this, toolbar, AppUI::Mode::DARK)},
-    noteList {std::make_unique<AppUI::ItemList>(this, dao, AppUI::Colours::DARK_PINK)},
+    noteList {std::make_unique<AppUI::ItemList>(this, dao, AppUI::Colours::PURPLE)},
     listActionBay {std::make_unique<AppUI::ActionBay>(this, listToolbar, AppUI::Mode::DARK)} {
     
         connectTextBoxToolbar();
