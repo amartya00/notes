@@ -9,6 +9,7 @@
     <file>resources/images/format_h3-black-180dp.png</file>
     <file>resources/images/format_p-black-180dp.png</file>
     <file>resources/images/format_underlined-black-180dp.png</file>
+    <file>resources/images/note_add-black-180dp.png</file>
     
     <!-- Dark mode icons-->
     <file>resources/images/format_bold-white-180dp.png</file>
@@ -19,5 +20,6 @@
     <file>resources/images/format_h3-white-180dp.png</file>
     <file>resources/images/format_p-white-180dp.png</file>
     <file>resources/images/format_underlined-white-180dp.png</file>
+    <file>resources/images/note_add-white-180dp.png</file>
 </qresource>
 </RCC>

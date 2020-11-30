@@ -4,7 +4,6 @@
 #include <memory>
 #include <map>
 #include <utility>
-#include <random>
 
 #include <QWidget>
 #include <QGridLayout>
@@ -18,8 +17,10 @@
 #include <ui/actionbay.hpp>
 #include <ui/constants.hpp>
 #include <ui/textbox.hpp>
+#include <ui/itemlist.hpp>
 
 #include <backend/notesdao.hpp>
+#include <backend/models.hpp>
 
 namespace AppUI {
     class MainWindow : public QWidget {
@@ -98,13 +99,29 @@ namespace AppUI {
                 }
             },
         };
-
+        
+        const std::vector<std::pair<QString, AppUI::ActionInfo>> listToolbar {
+            {
+                "new",
+                {
+                    ":/resources/images/fnote_add-black-180dp.png",
+                    ":/resources/images/note_add-white-180dp.png",
+                    false,
+                    QKeySequence::Bold
+                }
+            }
+        };
+        
+        AppBackend::LocalDAO& dao;
         std::unique_ptr<QGridLayout> mainGrid;
         std::unique_ptr<AppUI::TextBox> textBox;
         std::unique_ptr<AppUI::ActionBay> actionBay;
-        
-        long genRandomId();
+        std::unique_ptr<AppUI::ItemList> noteList;
+        std::unique_ptr<AppUI::ActionBay> listActionBay;
+
         void connectTextBoxToolbar();
+        AppBackend::Note newNote() const noexcept;
+        AppBackend::Note newNote() noexcept;
         
     public:
         MainWindow(const std::size_t initWidth, const std::size_t initHeight, AppBackend::LocalDAO& dao);

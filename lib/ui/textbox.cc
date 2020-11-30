@@ -18,11 +18,18 @@
         
 QString AppUI::TextBox::extractTitle() const {
     QString text = toPlainText().trimmed();
+    qWarning() << "Plain text is : " << text;
     if(text == 0) {
         return "Untitled Note";
     } else {
         int firstSentenceLen = text.indexOf('.');
+        firstSentenceLen = firstSentenceLen < 0? 51 : firstSentenceLen;
+        
         int firstParaLen = text.indexOf('\n');
+        firstParaLen = firstParaLen < 0? 51: firstParaLen;
+        
+        qWarning() << firstParaLen << " First para";
+        
         int titleLen = firstSentenceLen < firstParaLen ? firstSentenceLen : firstParaLen;
         return (titleLen > 0 && titleLen < 50) ? text.left(titleLen) : text.left(50);
     }

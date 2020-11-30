@@ -11,7 +11,7 @@
         
 QString AppUI::ActionBay::getCss() {
     return QString {
-        "QToolBar {background-color: " + AppUI::Colours::GRAY + "; border: none} "
+        "QToolBar {background-color: " + AppUI::Colours::GRAY + "; border: none; } "
         "QToolButton {"
         "height: 30px; "
         "width: 30px; "

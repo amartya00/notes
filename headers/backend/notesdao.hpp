@@ -55,6 +55,8 @@ namespace AppBackend {
         bool upsertRecord(const AppBackend::Note&);
         const std::optional<AppBackend::Note> loadRecord(const long) const;
         const std::vector<long>& listRecords() const;
+        long genRandomId() const noexcept;
+        long genRandomId() noexcept;
     };
 }
 

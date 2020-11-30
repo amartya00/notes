@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <optional>
 #include <unordered_map>
+#include <random>
 #include <utility>
 
 #include <QDebug>
@@ -67,7 +68,7 @@ bool AppBackend::LocalDAO::upsertRecord(const AppBackend::Note& note) {
         qWarning() << "Failed to insert query with id " << note.id << " because " << query.lastError().text();
         throw std::runtime_error("Failed to insert. " + std::string(__FILE__) + " " + std::to_string(__LINE__));
     } else {
-        qWarning() << "Saved query with id " << note.id;
+        qWarning() << "Saved query with id " << note.id << " with title " << note.title;
     }
 
     // Update / insert into cache
@@ -90,4 +91,18 @@ const std::optional<AppBackend::Note> AppBackend::LocalDAO::loadRecord(const lon
 
 const std::vector<long>& AppBackend::LocalDAO::listRecords() const {
     return noteIdList;
+}
+
+long AppBackend::LocalDAO::genRandomId() const noexcept {
+    std::random_device rd;     
+    std::mt19937_64 eng(rd()); 
+    std::uniform_int_distribution<long> distr;
+    return distr(eng);
+}
+
+long AppBackend::LocalDAO::genRandomId() noexcept {
+    std::random_device rd;     
+    std::mt19937_64 eng(rd()); 
+    std::uniform_int_distribution<long> distr;
+    return distr(eng);
 }
