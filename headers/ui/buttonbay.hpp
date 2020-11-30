@@ -3,17 +3,11 @@
 
 #include <memory>
 #include <vector>
-#include <unordered_map>
-#include <utility>
 
-#include <QWidget>
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QString>
-#include <QSizePolicy>
 #include <QSpacerItem>
-#include <QIcon>
-#include <QPixmap>
 
 namespace AppUI {
     struct ButtonInfo {
@@ -29,24 +23,8 @@ namespace AppUI {
         QSpacerItem* spacer;
         
     public:
-        ButtonBay(QWidget* parent, const std::vector<std::pair<QString, ButtonInfo>>& buttonLabels): 
-            QHBoxLayout(nullptr),
-            spacer {new QSpacerItem(10, 10, QSizePolicy::Expanding)} {
-            for(const auto& label : buttonLabels) {
-                auto button {std::make_unique<QPushButton>(label.first, parent)};
-                button->setStyleSheet(label.second.css);
-                QPixmap pixmap(label.second.iconPath);
-                QIcon icon(pixmap);
-                button -> setIcon(icon);
-                addWidget(button.get());
-                buttons[label.first] = std::move(button);
-            }
-            addSpacerItem(spacer);
-        }
-        
-        std::unique_ptr<QPushButton>& getButton(const QString& buttonLabel) {
-            return buttons.at(buttonLabel);
-        }
+        ButtonBay(QWidget* parent, const std::vector<std::pair<QString, ButtonInfo>>& buttonLabels);
+        std::unique_ptr<QPushButton>& getButton(const QString& buttonLabel);
     };
 }
 

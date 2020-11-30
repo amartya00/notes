@@ -12,8 +12,9 @@ qt5_deps = dependency('qt5', modules: ['Core', 'Gui', 'Widgets', 'Sql'])
 preprocessed = qt5.preprocess(qresources: 'resources.qrc')
 
 subdir('headers')
-subdir('src')
 subdir('lib')
+subdir('src')
+
 
 
 
