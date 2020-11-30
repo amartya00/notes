@@ -104,6 +104,7 @@ void AppUI::MainWindow::connectTextBoxToolbar() {
 }
 
 AppBackend::Note AppUI::MainWindow::newNote() const noexcept {
+    qWarning() << "Generating new note.";
     return AppBackend::Note {
         dao.genRandomId(),
         "Untitled note",
@@ -112,6 +113,7 @@ AppBackend::Note AppUI::MainWindow::newNote() const noexcept {
 }
 
 AppBackend::Note AppUI::MainWindow::newNote() noexcept {
+    qWarning() << "Generating new note.";
     return AppBackend::Note {
         dao.genRandomId(),
         "Untitled note",

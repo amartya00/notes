@@ -8,7 +8,6 @@
 
 #include <QTextEdit>
 
-
 #include <ui/constants.hpp>
 #include <backend/notesdao.hpp>
 #include <backend/models.hpp>
@@ -19,11 +18,11 @@ namespace AppUI {
         static const int H1_SIZE = 32;
         static const int H2_SIZE = 26;
         static const int H3_SIZE = 20;
-        static const int P_SIZE = 12;
-        
+        static const int P_SIZE = 14;
+
         AppBackend::LocalDAO& dao;
-        long currentNoteId;
-        
+        std::optional<long> currentNoteId {std::nullopt};
+
         QString extractTitle() const;
 
     public:

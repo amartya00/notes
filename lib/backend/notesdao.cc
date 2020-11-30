@@ -22,6 +22,7 @@
 namespace NotesTable = AppBackend::NotesTableConstants;
 
 AppBackend::LocalDAO::LocalDAO(const QSqlDatabase& database): database {database} {
+    std::lock_guard<std::shared_mutex> writerLock(lock);
     initTable();
     initCache();
 }
@@ -34,8 +35,6 @@ void AppBackend::LocalDAO::initTable() {
         } else {
             qWarning() << "Successfully created table";
         }
-    } else {
-        qWarning() << "Table already there";
     }
 }
 
@@ -49,6 +48,7 @@ void AppBackend::LocalDAO::initCache() {
             long id {static_cast<long>(query.value("id").toLongLong())};
             QString title {query.value("title").toString()};
             QString body {query.value("body").toString()};
+            qWarning() << "Loaded note with ID " << id;
 
             noteIdList.push_back(id);
             noteMap.insert(std::make_pair(id, AppBackend::Note {id, title, body}));
@@ -58,6 +58,7 @@ void AppBackend::LocalDAO::initCache() {
 
 
 bool AppBackend::LocalDAO::upsertRecord(const AppBackend::Note& note) {
+    std::lock_guard<std::shared_mutex> writerLock(lock);
     // Write through to the backing store
     QSqlQuery query;
     query.prepare(NotesTable::UPSERT_NOTE_SQL_STRING);
@@ -66,9 +67,7 @@ bool AppBackend::LocalDAO::upsertRecord(const AppBackend::Note& note) {
     query.bindValue(":body", QVariant::fromValue(note.body));
     if(!query.exec()) {
         qWarning() << "Failed to insert query with id " << note.id << " because " << query.lastError().text();
-        throw std::runtime_error("Failed to insert. " + std::string(__FILE__) + " " + std::to_string(__LINE__));
-    } else {
-        qWarning() << "Saved query with id " << note.id << " with title " << note.title;
+        throw std::runtime_error("Failed to insert query.");
     }
 
     // Update / insert into cache
@@ -82,6 +81,7 @@ bool AppBackend::LocalDAO::upsertRecord(const AppBackend::Note& note) {
 }
 
 const std::optional<AppBackend::Note> AppBackend::LocalDAO::loadRecord(const long id) const {
+    std::shared_lock<std::shared_mutex> readerLock(lock);
     if (noteMap.find(id) != noteMap.end()) {
         return noteMap.at(id);
     } else {
@@ -90,6 +90,7 @@ const std::optional<AppBackend::Note> AppBackend::LocalDAO::loadRecord(const lon
 }
 
 const std::vector<long>& AppBackend::LocalDAO::listRecords() const {
+    std::shared_lock<std::shared_mutex> readerLock(lock);
     return noteIdList;
 }
 
@@ -97,12 +98,14 @@ long AppBackend::LocalDAO::genRandomId() const noexcept {
     std::random_device rd;     
     std::mt19937_64 eng(rd()); 
     std::uniform_int_distribution<long> distr;
-    return distr(eng);
+    long retval {distr(eng)};
+    return retval;
 }
 
 long AppBackend::LocalDAO::genRandomId() noexcept {
     std::random_device rd;     
     std::mt19937_64 eng(rd()); 
     std::uniform_int_distribution<long> distr;
-    return distr(eng);
+    long retval {distr(eng)};
+    return retval;
 }

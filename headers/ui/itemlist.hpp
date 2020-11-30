@@ -19,8 +19,6 @@
 namespace AppUI {
     class ItemList : public QListWidget {
     private:
-        int rows;
-        AppUI::Mode mode;
         QString accent;
         AppBackend::LocalDAO& dao;
         
@@ -49,7 +47,6 @@ namespace AppUI {
     public :
         ItemList(QWidget* parent, AppBackend::LocalDAO& dao, const AppUI::Mode& mode): 
             QListWidget(parent),
-            mode {mode},
             dao {dao} {
             accent = mode == AppUI::Mode::DARK? AppUI::Colours::WHITE : AppUI::Colours::GRAY;
             setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);

@@ -15,7 +15,7 @@
 #include <ui/textbox.hpp>
 #include <backend/notesdao.hpp>
 #include <backend/models.hpp>
-        
+
 QString AppUI::TextBox::extractTitle() const {
     QString text = toPlainText().trimmed();
     if(text == 0) {
@@ -119,17 +119,20 @@ void AppUI::TextBox::pSelection() {
 }
 
 void AppUI::TextBox::save() {
-    QString extractedTitle {extractTitle()};
-    dao.upsertRecord(
-        AppBackend::Note {
-            currentNoteId,
-            extractedTitle,
-            toHtml()
-        }
-    );
+    if (currentNoteId != std::nullopt){
+        QString extractedTitle {extractTitle()};
+        dao.upsertRecord(
+            AppBackend::Note {
+                *currentNoteId,
+                extractedTitle,
+                toHtml()
+            }
+        );
+    }
 }
 
 void AppUI::TextBox::refreshContent(const long newNoteId) {
+    save();
     currentNoteId = newNoteId;
     std::optional<AppBackend::Note> note {dao.loadRecord(newNoteId)};
     if (note == std::nullopt) {

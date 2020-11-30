@@ -8,6 +8,7 @@
 #include <optional>
 #include <unordered_map>
 #include <utility>
+#include <shared_mutex>
 
 #include <QDebug>
 #include <QDir>
@@ -44,6 +45,7 @@ namespace AppBackend {
     class LocalDAO {
     private:
         QSqlDatabase database;
+        mutable std::shared_mutex lock;
         std::vector<long> noteIdList;
         std::unordered_map<long, AppBackend::Note> noteMap;
         

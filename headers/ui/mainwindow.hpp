@@ -4,6 +4,7 @@
 #include <memory>
 #include <map>
 #include <utility>
+#include <unordered_map>
 
 #include <QWidget>
 #include <QGridLayout>
