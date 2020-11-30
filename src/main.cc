@@ -53,7 +53,7 @@ int main(int argc, char* argv[]) {
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
     QApplication app(argc, argv);
     AppUI::MainWindow window {700, 500, dao};
-    window.setWindowTitle("Simple example");
+    window.setWindowTitle("Notes");
     window.show();
     app.exec();
 }

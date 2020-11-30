@@ -98,7 +98,6 @@ void AppUI::MainWindow::connectTextBoxToolbar() {
         &QListWidget::itemClicked, 
         textBox.get(),
         [this](const QListWidgetItem* itm) {
-            qWarning() << "Note selected ";
             const AppUI::NoteListItem* listItm {reinterpret_cast<const AppUI::NoteListItem*>(itm)};
             textBox->refreshContent(listItm->id);
         });
