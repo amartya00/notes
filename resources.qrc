@@ -12,7 +12,7 @@
     <file>resources/images/note_add-black-180dp.png</file>
     <file>resources/images/delete-black-180dp.png</file>
     
-    <!-- Dark mode icons-->
+    <!-- Dark mode icons -->
     <file>resources/images/format_bold-white-180dp.png</file>
     <file>resources/images/format_italic-white-180dp.png</file>
     <file>resources/images/save-white-180dp.png</file>
@@ -23,5 +23,16 @@
     <file>resources/images/format_underlined-white-180dp.png</file>
     <file>resources/images/note_add-white-180dp.png</file>
     <file>resources/images/delete-white-180dp.png</file>
+
+    <!-- Fonts -->
+    <file>resources/fonts/Ubuntu-Bold.ttf</file>
+    <file>resources/fonts/Ubuntu-BoldItalic.ttf</file>
+    <file>resources/fonts/Ubuntu-Italic.ttf</file>
+    <file>resources/fonts/Ubuntu-Light.ttf</file>
+    <file>resources/fonts/Ubuntu-LightItalic.ttf</file>
+    <file>resources/fonts/Ubuntu-Medium.ttf</file>
+    <file>resources/fonts/Ubuntu-MediumItalic.ttf</file>
+    <file>resources/fonts/Ubuntu-Regular.ttf</file>
+    <file>resources/fonts/UbuntuCondensed-Regular.ttf</file>
 </qresource>
 </RCC>

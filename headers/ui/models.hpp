@@ -10,7 +10,9 @@ namespace AppUI {
         const long id;
         NoteListItem(const long id, const QString& text): 
             QListWidgetItem(text),
-            id {id} {}
+            id {id} {
+                
+            }
     };
 }
 

@@ -25,6 +25,30 @@ namespace AppUI {
             ActionInfo info;
             std::unique_ptr<QAction> button;
         };
+
+        const QString CSS_TEMPLATE {
+            "QToolBar {background-color: %1; border: none; } "
+            "QToolButton {"
+            "height: 30px; "
+            "width: 30px; "
+            "margin-right: 8px; "
+            "qproperty-iconSize: 24px;"
+            "} "
+            "QToolButton:checked {"
+            "border: 2px solid %2; "
+            "border-radius: 3px;"
+            "} "
+            "QToolButton:!checked {"
+            "} "
+            "QToolButton:hover {"
+            "border: 1px solid %2; "
+            "border-radius: 3px;"
+            "} "
+            "QToolButton:pressed {"
+            "border: 2px solid %2; "
+            "border-radius: 2px;"
+            "} "
+        };
         
         std::unordered_map<QString, Action> buttons;
         AppUI::Mode mode;
@@ -39,7 +63,8 @@ namespace AppUI {
         ActionBay(
             QWidget* parent, 
             const std::vector<std::pair<QString, ActionInfo>>& buttonLabels,
-            AppUI::Mode mode
+            AppUI::Mode mode,
+            const QString& accent
         );        
         std::unique_ptr<QAction>& getButton(const QString& buttonLabel);
     };

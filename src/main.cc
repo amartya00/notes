@@ -5,6 +5,7 @@
 #include <QDir>
 #include <QDebug>
 #include <QSqlDatabase>
+#include <QFontDatabase>
 
 #include <ui/mainwindow.hpp>
 #include <backend/notesdao.hpp>
@@ -42,17 +43,29 @@ namespace {
             throw std::runtime_error("SQLITE driver not available.");
         }
     }
+
+    void loadFonts() {
+        QFontDatabase::addApplicationFont(":/resources/fonts/Ubuntu-Bold.ttf");
+        QFontDatabase::addApplicationFont(":/resources/fonts/Ubuntu-Regular.ttf");
+        QFontDatabase::addApplicationFont(":/resources/fonts/Ubuntu-Italic.ttf");
+        QFontDatabase::addApplicationFont(":/resources/fonts/Ubuntu-BoldItalic.ttf");
+        QFontDatabase::addApplicationFont(":/resources/fonts/UbuntuCondensed-Regular.ttf");
+    }
 }
 
 
 
 int main(int argc, char* argv[]) {
-    initWorkingDirectory();
-    AppBackend::LocalDAO dao {getDatabase()};
     
+
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
     QApplication app(argc, argv);
-    AppUI::MainWindow window {700, 500, dao};
+    // Initialize data and resources for application
+    initWorkingDirectory();
+    AppBackend::LocalDAO dao {getDatabase()};
+    loadFonts();
+    
+    AppUI::MainWindow window {700, 500, dao, AppUI::Mode::DARK, AppUI::Colours::PURPLE};
     window.setWindowTitle("Notes");
     window.show();
     app.exec();

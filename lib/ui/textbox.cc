@@ -16,12 +16,14 @@
 #include <backend/notesdao.hpp>
 #include <backend/models.hpp>
 
-AppUI::TextBox::TextBox(QWidget* parent, AppBackend::LocalDAO& dao):
+AppUI::TextBox::TextBox(QWidget* parent, AppBackend::LocalDAO& dao, const AppUI::Mode& mode, const QString& accent):
     QTextEdit(parent),
-    dao {dao} {
+    dao {dao},
+    mode {mode},
+    accent {accent} {
     setAcceptRichText(true);
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-    setStyleSheet(AppUI::ButtonConstants::TEXT_EDIT_DARK_BG_CSS);
+    setStyleSheet(getCss());
     setFontPointSize(P_SIZE);
 }
 
@@ -29,7 +31,17 @@ AppUI::TextBox::~TextBox() {
     save();
 }
 
-QString AppUI::TextBox::extractTitle() const {
+QString AppUI::TextBox::getCss() const noexcept {
+    switch (mode)
+    {
+    case AppUI::Mode::DARK:
+        return CSS_TEMPLATE.arg(AppUI::Colours::VERY_DARK_GRAY, accent, AppUI::Colours::WHITE);
+    default:
+        return CSS_TEMPLATE.arg(AppUI::Colours::WHITE, accent, AppUI::Colours::BLACK);
+    } 
+}
+
+QString AppUI::TextBox::extractTitle() const noexcept {
     QString text = toPlainText().trimmed();
     if(text == 0) {
         return "Untitled Note";
@@ -39,11 +51,11 @@ QString AppUI::TextBox::extractTitle() const {
         int firstParaLen = text.indexOf('\n');
         firstParaLen = firstParaLen < 0? 51: firstParaLen;
         int titleLen = firstSentenceLen < firstParaLen ? firstSentenceLen : firstParaLen;
-        return (titleLen > 0 && titleLen < 50) ? text.left(titleLen) : text.left(50);
+        return (titleLen > 0 && titleLen < 50) ? text.left(titleLen).trimmed() : text.left(50).trimmed();
     }
 }
 
-void AppUI::TextBox::boldSelection(bool isSet) {            
+void AppUI::TextBox::boldSelection(bool isSet) noexcept {            
     QTextCursor cursor {textCursor()};
     QTextCharFormat bold;
     bold.setFontWeight(isSet ? QFont::Bold : QFont::Normal);
@@ -51,14 +63,14 @@ void AppUI::TextBox::boldSelection(bool isSet) {
     setFontWeight(isSet ? QFont::Bold : QFont::Normal);
 }
 
-void AppUI::TextBox::italicsSelection(bool isSet) {            
+void AppUI::TextBox::italicsSelection(bool isSet) noexcept {            
     QTextCursor cursor {textCursor()};
     QTextCharFormat bold;
     bold.setFontItalic(isSet);
     cursor.mergeCharFormat(bold);
     setFontItalic(isSet);
 }
-void AppUI::TextBox::underlineSelection(bool isSet) {            
+void AppUI::TextBox::underlineSelection(bool isSet) noexcept {            
     QTextCursor cursor {textCursor()};
     QTextCharFormat bold;
     bold.setFontUnderline(isSet);
@@ -66,7 +78,7 @@ void AppUI::TextBox::underlineSelection(bool isSet) {
     setFontUnderline(isSet);
 }
 
-void AppUI::TextBox::heading1Selection(bool isSet) {
+void AppUI::TextBox::heading1Selection(bool isSet) noexcept {
     QTextCursor cursor {textCursor()};
     cursor.beginEditBlock();
     cursor.movePosition(QTextCursor::StartOfBlock);
@@ -80,7 +92,7 @@ void AppUI::TextBox::heading1Selection(bool isSet) {
     setFontPointSize(isSet ? H1_SIZE : P_SIZE);
 }
 
-void AppUI::TextBox::heading2Selection(bool isSet) {
+void AppUI::TextBox::heading2Selection(bool isSet) noexcept {
     QTextCursor cursor {textCursor()};
     cursor.beginEditBlock();
     cursor.movePosition(QTextCursor::StartOfBlock);
@@ -94,7 +106,7 @@ void AppUI::TextBox::heading2Selection(bool isSet) {
     setFontPointSize(isSet ? H2_SIZE : P_SIZE);
 }
 
-void AppUI::TextBox::heading3Selection(bool isSet) {
+void AppUI::TextBox::heading3Selection(bool isSet) noexcept {
     QTextCursor cursor {textCursor()};
     cursor.beginEditBlock();
     cursor.movePosition(QTextCursor::StartOfBlock);
@@ -108,7 +120,7 @@ void AppUI::TextBox::heading3Selection(bool isSet) {
     setFontPointSize(isSet ? H3_SIZE : P_SIZE);
 }
 
-void AppUI::TextBox::pSelection() {
+void AppUI::TextBox::pSelection() noexcept {
     QTextCursor cursor {textCursor()};
     cursor.beginEditBlock();
     cursor.movePosition(QTextCursor::StartOfBlock);
@@ -147,7 +159,7 @@ void AppUI::TextBox::refreshContent(const long newNoteId) {
     }
 }
 
-void AppUI::TextBox::resetView() {
+void AppUI::TextBox::resetView() noexcept {
     const std::vector<long>& ids {dao.listRecords()};
     if (ids.size() == 0) {
         // If there are no existing notes

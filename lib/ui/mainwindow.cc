@@ -23,7 +23,7 @@
 #include <ui/mainwindow.hpp>
 #include <ui/models.hpp>
 
-void AppUI::MainWindow::connectTextBoxToolbar() {
+void AppUI::MainWindow::connectTextBoxToolbar() noexcept {
     connect(actionBay->getButton("bold").get(), &QAction::toggled, textBox.get(), &AppUI::TextBox::boldSelection);
     connect(actionBay->getButton("italics").get(), &QAction::toggled, textBox.get(), &AppUI::TextBox::italicsSelection);
     connect(actionBay->getButton("underline").get(), &QAction::toggled, textBox.get(), &AppUI::TextBox::underlineSelection);
@@ -109,11 +109,15 @@ void AppUI::MainWindow::connectTextBoxToolbar() {
         [this]() {
             noteList->deleteSelected();
             textBox->resetView();
+            noteList->updateView();
         });
 }
 
+QString AppUI::MainWindow::getCss() const noexcept {
+    return CSS_TEMPLATE.arg(mode == AppUI::Mode::DARK ? AppUI::Colours::VERY_DARK_GRAY : AppUI::Colours::WHITE);
+}
+
 AppBackend::Note AppUI::MainWindow::newNote() const noexcept {
-    qWarning() << "Generating new note.";
     return AppBackend::Note {
         dao.genRandomId(),
         "Untitled note",
@@ -121,23 +125,20 @@ AppBackend::Note AppUI::MainWindow::newNote() const noexcept {
     };
 }
 
-AppBackend::Note AppUI::MainWindow::newNote() noexcept {
-    qWarning() << "Generating new note.";
-    return AppBackend::Note {
-        dao.genRandomId(),
-        "Untitled note",
-        "Untitled note\n"
-    };
-}
-
-AppUI::MainWindow::MainWindow(const std::size_t initWidth, const std::size_t initHeight, AppBackend::LocalDAO& dao): 
+AppUI::MainWindow::MainWindow(
+    const std::size_t initWidth,
+    const std::size_t initHeight,
+    AppBackend::LocalDAO& dao,
+    const AppUI::Mode& mode,
+    const QString& accent):
     dao {dao},
+    mode {mode},
     mainGrid {std::make_unique<QGridLayout>(this)},
-    textBox {std::make_unique<AppUI::TextBox>(this, dao)},
-    actionBay {std::make_unique<AppUI::ActionBay>(this, toolbar, AppUI::Mode::DARK)},
-    noteList {std::make_unique<AppUI::ItemList>(this, dao, AppUI::Colours::PURPLE)},
-    listActionBay {std::make_unique<AppUI::ActionBay>(this, listToolbar, AppUI::Mode::DARK)} {
-    
+    textBox {std::make_unique<AppUI::TextBox>(this, dao, mode, accent)},
+    actionBay {std::make_unique<AppUI::ActionBay>(this, toolbar, mode, accent)},
+    noteList {std::make_unique<AppUI::ItemList>(this, dao, accent)},
+    listActionBay {std::make_unique<AppUI::ActionBay>(this, listToolbar, mode, accent)} {
+        setStyleSheet(getCss());
         connectTextBoxToolbar();
         
         textBox->resetView();
@@ -149,6 +150,5 @@ AppUI::MainWindow::MainWindow(const std::size_t initWidth, const std::size_t ini
         mainGrid->addWidget(textBox.get(), 0, 1);
         mainGrid->addWidget(actionBay.get(), 1, 1);
         setLayout(mainGrid.get());
-        this->setStyleSheet(AppUI::ButtonConstants::MAN_WINDOW_DARK_CSS);
         this->resize(initWidth, initHeight);
 }

@@ -10,29 +10,11 @@
 #include <ui/actionbay.hpp>
         
 QString AppUI::ActionBay::getCss() {
-    return QString {
-        "QToolBar {background-color: " + AppUI::Colours::GRAY + "; border: none; } "
-        "QToolButton {"
-        "height: 30px; "
-        "width: 30px; "
-        "margin-right: 8px; "
-        "qproperty-iconSize: 24px;"
-        "} "
-        "QToolButton:checked {"
-        "border: 2px solid " + accent + "; "
-        "border-radius: 3px;"
-        "} "
-        "QToolButton:!checked {"
-        "} "
-        "QToolButton:hover {"
-        "border: 1px solid " + accent + "; "
-        "border-radius: 3px;"
-        "} "
-        "QToolButton:pressed {"
-        "border: 2px solid " + accent + "; "
-        "border-radius: 2px;"
-        "} "
-    };
+    
+    return CSS_TEMPLATE.arg(
+        mode == AppUI::Mode::DARK? AppUI::Colours::VERY_DARK_GRAY : AppUI::Colours::WHITE,
+        accent
+    );
 }
         
 void AppUI::ActionBay::setLightIcon(Action& action) {
@@ -59,11 +41,9 @@ void AppUI::ActionBay::initAction(Action& action) {
 AppUI::ActionBay::ActionBay(
     QWidget* parent, 
     const std::vector<std::pair<QString, ActionInfo>>& buttonLabels,
-    AppUI::Mode mode
-): mode {mode} {
-    // Set accent according to mode
-    accent = mode == AppUI::Mode::DARK? AppUI::Colours::WHITE : AppUI::Colours::BLACK;
-
+    AppUI::Mode mode,
+    const QString& accent
+): mode {mode}, accent {accent} {
     // Populate the button map
     for(const auto& label : buttonLabels) {
         Action action {

@@ -26,6 +26,7 @@
 namespace AppUI {
     class MainWindow : public QWidget {
     private:
+        const QString CSS_TEMPLATE {"background-color: %1; color: white; padding-left: 0px; margin-left: 0px;"};
         const std::vector<std::pair<QString, AppUI::ActionInfo>> toolbar {
             {
                 "bold",
@@ -105,7 +106,7 @@ namespace AppUI {
             {
                 "new",
                 {
-                    ":/resources/images/fnote_add-black-180dp.png",
+                    ":/resources/images/note_add-black-180dp.png",
                     ":/resources/images/note_add-white-180dp.png",
                     false,
                     QKeySequence::New
@@ -123,18 +124,24 @@ namespace AppUI {
         };
         
         AppBackend::LocalDAO& dao;
+        AppUI::Mode mode;
         std::unique_ptr<QGridLayout> mainGrid;
         std::unique_ptr<AppUI::TextBox> textBox;
         std::unique_ptr<AppUI::ActionBay> actionBay;
         std::unique_ptr<AppUI::ItemList> noteList;
         std::unique_ptr<AppUI::ActionBay> listActionBay;
 
-        void connectTextBoxToolbar();
+        QString getCss() const noexcept;
+        void connectTextBoxToolbar() noexcept;
         AppBackend::Note newNote() const noexcept;
-        AppBackend::Note newNote() noexcept;
         
     public:
-        MainWindow(const std::size_t initWidth, const std::size_t initHeight, AppBackend::LocalDAO& dao);
+        MainWindow(
+            const std::size_t initWidth,
+            const std::size_t initHeight,
+            AppBackend::LocalDAO& dao,
+            const AppUI::Mode& mode,
+            const QString& accent);
     };
 }
 

@@ -22,22 +22,33 @@ namespace AppUI {
 
         AppBackend::LocalDAO& dao;
         std::optional<long> currentNoteId {std::nullopt};
+        AppUI::Mode mode;
+        QString accent;
+        const QString CSS_TEMPLATE {
+            "background: %1; "
+            "font-size: 15px; "
+            "font-family: 'Ubuntu'; "
+            "color: %3;"
+            "border: 2px solid %2; "
+            "border-radius: 3px;"
+        };
 
-        QString extractTitle() const;
+        QString extractTitle() const noexcept;
 
     public:
-        TextBox(QWidget* parent, AppBackend::LocalDAO& dao);
+        TextBox(QWidget* parent, AppBackend::LocalDAO& dao, const AppUI::Mode& mode, const QString& accent);
         ~TextBox();
-        void boldSelection(bool isSet);
-        void italicsSelection(bool isSet);
-        void underlineSelection(bool isSet);
-        void heading1Selection(bool isSet);
-        void heading2Selection(bool isSet);
-        void heading3Selection(bool isSet);
-        void pSelection();
+        QString getCss() const noexcept;
+        void boldSelection(bool isSet) noexcept;
+        void italicsSelection(bool isSet) noexcept;
+        void underlineSelection(bool isSet) noexcept;
+        void heading1Selection(bool isSet) noexcept;
+        void heading2Selection(bool isSet) noexcept;
+        void heading3Selection(bool isSet) noexcept;
+        void pSelection() noexcept;
         void save();
         void refreshContent(const long newNoteId);
-        void resetView();
+        void resetView() noexcept;
     };
 }
 

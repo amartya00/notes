@@ -27,18 +27,24 @@ namespace AppUI {
                 "QListWidget {"
                 "min-width: 200px;"
                 "max-width: 200px;"
-                "border: 0px solid; "
+                "border: none; "
+                "font-family: 'Ubuntu Condensed';"
                 "font-size: 20px;"
+                "font-weight: bold;"
+                "text-align: center;"
                 "} "
                 "QListWidget::item {"
                 "height: 50px;"
-                "width: 195px;"
-                "border-bottom: 1px solid ; "
-                "padding-bottom: 3px;"
+                "width: 180px;"
+                "border: none;"
+                "text-align: center;"
                 "}"
                 "QListWidget::item:selected {"
-                "border-bottom: 3px solid " + accent + ";"
-                "color: " + accent + ";"
+                "background: " + accent + ";"
+                "color: " + AppUI::Colours::BLACK + ";"
+                "border: none;"
+                "border-radius: 3px;"
+                "text-align: center;"
                 "}"
             };
         }
@@ -48,7 +54,6 @@ namespace AppUI {
             QListWidget(parent),
             accent {accent},
             dao {dao} {
-            //accent = mode == AppUI::Mode::DARK? AppUI::Colours::WHITE : AppUI::Colours::GRAY;
             setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
             setStyleSheet(getCss());
         }
