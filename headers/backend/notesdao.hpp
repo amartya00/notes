@@ -59,6 +59,7 @@ namespace AppBackend {
     public:
         LocalDAO(const QSqlDatabase& database);
         void upsertRecord(const AppBackend::Note&);
+        // We cannot pass references in optional.
         const std::optional<AppBackend::Note> loadRecord(const long) const;
         const std::vector<long>& listRecords() const;
         long genRandomId() const noexcept;

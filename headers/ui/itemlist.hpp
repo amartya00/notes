@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <vector>
+#include <unordered_map>
 
 #include <QListWidget>
 #include <QListWidgetItem>
@@ -19,76 +20,40 @@
 namespace AppUI {
     class ItemList : public QListWidget {
     private:
+        const QString CSS_TEMPLATE {
+            "QListWidget {"
+            "min-width: 200px;"
+            "max-width: 200px;"
+            "border: none; "
+            "font-family: 'Ubuntu Condensed';"
+            "font-size: 20px;"
+            "font-weight: bold;"
+            "text-align: center;"
+            "} "
+            "QListWidget::item {"
+            "height: 50px;"
+            "width: 180px;"
+            "border: none;"
+            "text-align: center;"
+            "}"
+            "QListWidget::item:selected {"
+            "background: %1;"
+            "color: %2;"
+            "border: none;"
+            "border-radius: 3px;"
+            "text-align: center;"
+            "}"
+        };
         QString accent;
         AppBackend::LocalDAO& dao;
-        
-        QString getCss() {
-            return QString {
-                "QListWidget {"
-                "min-width: 200px;"
-                "max-width: 200px;"
-                "border: none; "
-                "font-family: 'Ubuntu Condensed';"
-                "font-size: 20px;"
-                "font-weight: bold;"
-                "text-align: center;"
-                "} "
-                "QListWidget::item {"
-                "height: 50px;"
-                "width: 180px;"
-                "border: none;"
-                "text-align: center;"
-                "}"
-                "QListWidget::item:selected {"
-                "background: " + accent + ";"
-                "color: " + AppUI::Colours::BLACK + ";"
-                "border: none;"
-                "border-radius: 3px;"
-                "text-align: center;"
-                "}"
-            };
-        }
+        QString getCss() const noexcept;
         
     public :
-        ItemList(QWidget* parent, AppBackend::LocalDAO& dao, const QString accent): 
-            QListWidget(parent),
-            accent {accent},
-            dao {dao} {
-            setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-            setStyleSheet(getCss());
-        }
-        
-        void updateView() {
-            int current = currentRow();
-            clear();
-            const std::vector<long>& items {dao.listRecords()};
-            for (auto id : items) {
-                AppBackend::Note note {std::move(*dao.loadRecord(id))};
-                addItem(new AppUI::NoteListItem(note.id, note.title));
-            }
-            setCurrentRow(current);
-            update();
-        }
-
-        void selectFirst() {
-            setCurrentRow(0);
-            update();
-        }
-
-        void selectLast() {
-            setCurrentRow(count()-1);
-            update();
-        }
-
-        void deleteSelected() {
-            for (const QListWidgetItem* current : selectedItems()) {
-                const AppUI::NoteListItem* itm {reinterpret_cast<const AppUI::NoteListItem*>(current)};
-                long id {itm->id};
-                dao.deleteRecord(id);
-            }
-            updateView();
-            selectFirst();
-        }
+        ItemList(QWidget* parent, AppBackend::LocalDAO& dao, const QString accent);
+        void updateView() noexcept;
+        void selectFirst() noexcept;
+        void selectLast() noexcept;
+        void deleteSelected();
     };
 }
 

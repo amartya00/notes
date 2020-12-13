@@ -158,20 +158,3 @@ void AppUI::TextBox::refreshContent(const long newNoteId) {
         update();
     }
 }
-
-void AppUI::TextBox::resetView() noexcept {
-    const std::vector<long>& ids {dao.listRecords()};
-    if (ids.size() == 0) {
-        // If there are no existing notes
-        // Generate an emoty one
-        qWarning() << "No existing notes. Creating an empty one.";
-        currentNoteId = dao.genRandomId();
-        setText("Untitled Note");
-        save();
-    } else {
-        // Invalidate current note as it has been deleted or is uninitialized.
-        // Then refresh the view to the first item in the note.
-        currentNoteId = std::nullopt;
-        refreshContent(ids[0]);
-    }
-}

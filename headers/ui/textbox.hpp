@@ -48,7 +48,6 @@ namespace AppUI {
         void pSelection() noexcept;
         void save();
         void refreshContent(const long newNoteId);
-        void resetView() noexcept;
     };
 }
 

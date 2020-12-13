@@ -11,9 +11,11 @@ backend_lib = static_library(
 
 ui_files = [
     'ui/actionbay.cc',
-    'ui/buttonbay.cc',
+    'ui/wordprocessor.cc',
     'ui/mainwindow.cc',
-    'ui/textbox.cc'
+    'ui/textbox.cc',
+    'ui/itemlist.cc',
+    'ui/notesidebar.cc'
 ]
 
 ui_lib = static_library(

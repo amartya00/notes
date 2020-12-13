@@ -8,29 +8,33 @@
 
 #include <ui/constants.hpp>
 #include <ui/actionbay.hpp>
+#include <ui/models.hpp>
+
+using AppUI::ActionBay;
+using AppUI::ActionInfo;
+using AppUI::Action;
         
-QString AppUI::ActionBay::getCss() {
-    
+QString ActionBay::getCss() {
     return CSS_TEMPLATE.arg(
         mode == AppUI::Mode::DARK? AppUI::Colours::VERY_DARK_GRAY : AppUI::Colours::WHITE,
         accent
     );
 }
         
-void AppUI::ActionBay::setLightIcon(Action& action) {
+void ActionBay::setLightIcon(Action& action) {
     QPixmap pixmap(action.info.lightIconPath);
     QIcon icon(pixmap);
     action.button->setIcon(icon);
     action.button->setIconVisibleInMenu(true);
 }
 
-void AppUI::ActionBay::setDarkIcon(Action& action) {
+void ActionBay::setDarkIcon(Action& action) {
     QPixmap pixmap(action.info.darkIconPath);
     QIcon icon(pixmap);
     action.button->setIcon(icon);
 }
 
-void AppUI::ActionBay::initAction(Action& action) {
+void ActionBay::initAction(Action& action) {
     mode == AppUI::Mode::DARK? setDarkIcon(action) : setLightIcon(action);
     action.button->setCheckable(action.info.checkable);
     if (action.info.shortcut != std::nullopt) {
@@ -38,7 +42,7 @@ void AppUI::ActionBay::initAction(Action& action) {
     }
 }
         
-AppUI::ActionBay::ActionBay(
+ActionBay::ActionBay(
     QWidget* parent, 
     const std::vector<std::pair<QString, ActionInfo>>& buttonLabels,
     AppUI::Mode mode,
@@ -46,18 +50,20 @@ AppUI::ActionBay::ActionBay(
 ): mode {mode}, accent {accent} {
     // Populate the button map
     for(const auto& label : buttonLabels) {
-        Action action {
-            label.second,
-            {std::make_unique<QAction>(parent)}
-        };
-        initAction(action);
-        addAction(action.button.get());
-        buttons[label.first] = std::move(action);
+        buttons.emplace(
+            label.first,
+            Action {
+                label.second,
+                std::make_unique<QAction>(parent)
+            }
+        );
+        initAction(buttons.at(label.first));
+        addAction(buttons.at(label.first).button.get());
     }
     // Set the stylesheet
     setStyleSheet(getCss());
 }
-        
-std::unique_ptr<QAction>& AppUI::ActionBay::getButton(const QString& buttonLabel) {
-    return buttons.at(buttonLabel).button;
+
+QAction& ActionBay::getButton(const QString& buttonLabel) {
+    return *buttons.at(buttonLabel).button;
 }

@@ -10,22 +10,13 @@
 #include <QKeySequence>
 
 #include <ui/constants.hpp>
+#include <ui/models.hpp>
 
 namespace AppUI {
-    struct ActionInfo {
-        QString lightIconPath;
-        QString darkIconPath;
-        bool checkable;
-        std::optional<QKeySequence> shortcut;
-    };
+    
 
     class ActionBay: public QToolBar {
     private:
-        struct Action {
-            ActionInfo info;
-            std::unique_ptr<QAction> button;
-        };
-
         const QString CSS_TEMPLATE {
             "QToolBar {background-color: %1; border: none; } "
             "QToolButton {"
@@ -66,7 +57,8 @@ namespace AppUI {
             AppUI::Mode mode,
             const QString& accent
         );        
-        std::unique_ptr<QAction>& getButton(const QString& buttonLabel);
+        
+        QAction& getButton(const QString& buttonLabel);
     };
 }
 
