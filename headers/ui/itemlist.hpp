@@ -31,10 +31,11 @@ namespace AppUI {
             "text-align: center;"
             "} "
             "QListWidget::item {"
-            "height: 50px;"
+            "height: 30px;"
             "width: 180px;"
             "border: none;"
             "text-align: center;"
+            "margin-bottom: 5px;"
             "}"
             "QListWidget::item:selected {"
             "background: %1;"
@@ -42,6 +43,7 @@ namespace AppUI {
             "border: none;"
             "border-radius: 3px;"
             "text-align: center;"
+            "margin-bottom: 5px;"
             "}"
         };
         QString accent;
