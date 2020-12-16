@@ -62,7 +62,6 @@ namespace AppUI {
             {"DeleteButtonDark", ":/resources/images/delete-white-180dp.png"},
         };
         
-        AppBackend::LocalDAO& dao;
         AppUI::Mode mode;
         QGridLayout mainGrid;
         AppUI::WordProcessor wordProcessor;

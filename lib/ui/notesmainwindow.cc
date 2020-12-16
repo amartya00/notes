@@ -42,7 +42,6 @@ AppUI::NotesMainWindow::NotesMainWindow(
     AppBackend::LocalDAO& dao,
     const AppUI::Mode& mode,
     const QString& accent):
-    dao {dao},
     mode {mode},
     mainGrid {this},
     wordProcessor {this, iconMap, dao, mode, accent},
