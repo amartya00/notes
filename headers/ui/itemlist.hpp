@@ -31,6 +31,7 @@ namespace AppUI {
             "text-align: center;"
             "} "
             "QListWidget::item {"
+            "color: %3;"
             "height: 30px;"
             "width: 180px;"
             "border: none;"
@@ -46,12 +47,13 @@ namespace AppUI {
             "margin-bottom: 5px;"
             "}"
         };
+        AppUI::Mode mode;
         QString accent;
         AppBackend::LocalDAO& dao;
         QString getCss() const noexcept;
         
     public :
-        ItemList(QWidget* parent, AppBackend::LocalDAO& dao, const QString accent);
+        ItemList(QWidget* parent, AppBackend::LocalDAO& dao, const AppUI::Mode mode, const QString accent);
         void updateView() noexcept;
         void selectFirst() noexcept;
         void selectLast() noexcept;

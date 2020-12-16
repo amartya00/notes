@@ -16,14 +16,20 @@
 #include <ui/itemlist.hpp>
 #include <ui/wordprocessor.hpp>
 #include <ui/notesidebar.hpp>
+#include <ui/headerframe.hpp>
 
 #include <backend/notesdao.hpp>
 #include <backend/models.hpp>
 
 namespace AppUI {
-    class MainWindow : public QWidget {
+    class NotesMainWindow : public QWidget {
     private:
-        const QString CSS_TEMPLATE {"background-color: %1; color: white; padding-left: 0px; margin-left: 0px;"};
+        const QString CSS_TEMPLATE {
+            "background-color: %1; "
+            "color: white; "
+            "padding-left: 0px; "
+            "margin-left: 0px;"
+        };
         const std::unordered_map<QString, QString> iconMap {
             {"SaveButtonLight", ":/resources/images/save-black-180dp.png"},
             {"SaveButtonDark", ":/resources/images/save-white-180dp.png"},
@@ -64,10 +70,9 @@ namespace AppUI {
 
         QString getCss() const noexcept;
         void connectTextBoxToolbar() noexcept;
-        AppBackend::Note newNote() const noexcept;
-        
+
     public:
-        MainWindow(
+        NotesMainWindow(
             const std::size_t initWidth,
             const std::size_t initHeight,
             AppBackend::LocalDAO& dao,

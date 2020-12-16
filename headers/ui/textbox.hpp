@@ -6,14 +6,14 @@
 #include <iostream>
 #include <optional>
 
-#include <QTextEdit>
+#include <QTextBrowser>
 
 #include <ui/constants.hpp>
 #include <backend/notesdao.hpp>
 #include <backend/models.hpp>
 
 namespace AppUI {
-    class TextBox : public QTextEdit {
+    class TextBox : public QTextBrowser {
     private:
         static const int H1_SIZE = 32;
         static const int H2_SIZE = 26;
@@ -31,6 +31,7 @@ namespace AppUI {
             "color: %3;"
             "border: 2px solid %2; "
             "border-radius: 3px;"
+            "padding: 8px;"
         };
 
         QString extractTitle() const noexcept;
@@ -47,7 +48,7 @@ namespace AppUI {
         void heading3Selection(bool isSet) noexcept;
         void pSelection() noexcept;
         void save();
-        void refreshContent(const long newNoteId);
+        void refreshContent(const long newNoteId, bool writeBackCurrent);
     };
 }
 

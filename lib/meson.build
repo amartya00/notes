@@ -12,7 +12,7 @@ backend_lib = static_library(
 ui_files = [
     'ui/actionbay.cc',
     'ui/wordprocessor.cc',
-    'ui/mainwindow.cc',
+    'ui/notesmainwindow.cc',
     'ui/textbox.cc',
     'ui/itemlist.cc',
     'ui/notesidebar.cc'

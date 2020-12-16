@@ -41,9 +41,9 @@ namespace AppUI {
         void updateView() noexcept;
 
     signals:
-        void newNoteCreated(const long noteId);
-        void noteSelected(const long noteId);
-        void noteDeleted(const long noteId);
+        void newNoteCreated(const long noteId, bool writeBackCurrent);
+        void noteSelected(const long noteId, bool writeBackCurrent);
+        void noteDeleted(const long noteId, bool writeBackCurrent);
     };
 }
 

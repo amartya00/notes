@@ -50,6 +50,7 @@ WordProcessor::WordProcessor(
     textBox {parent, dao, mode, accent},
     actionBay {parent, generateToolbarData(), mode, accent} {
         connectInternl();
+        actionBay.getButton("p").setChecked(true);
         addWidget(&textBox);
         addWidget(&actionBay);
 }
@@ -203,6 +204,6 @@ const ActionBay& WordProcessor::getToolbar() const noexcept {
     return actionBay;    
 }
 
-void WordProcessor::refreshContent(const long noteId) {
-    textBox.refreshContent(noteId);
+void WordProcessor::refreshContent(const long noteId, bool writeBackContent) {
+    textBox.refreshContent(noteId, writeBackContent);
 }

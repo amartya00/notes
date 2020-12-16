@@ -5,7 +5,7 @@
 
 #include <QFont>
 #include <QWidget>
-#include <QTextEdit>
+#include <QTextBrowser>
 #include <QTextCursor>
 #include <QTextCharFormat>
 #include <QSizePolicy>
@@ -16,8 +16,11 @@
 #include <backend/notesdao.hpp>
 #include <backend/models.hpp>
 
+namespace Colors = AppUI::Colours;
+using AppUI::Mode;
+
 AppUI::TextBox::TextBox(QWidget* parent, AppBackend::LocalDAO& dao, const AppUI::Mode& mode, const QString& accent):
-    QTextEdit(parent),
+    QTextBrowser(parent),
     dao {dao},
     mode {mode},
     accent {accent} {
@@ -25,6 +28,13 @@ AppUI::TextBox::TextBox(QWidget* parent, AppBackend::LocalDAO& dao, const AppUI:
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     setStyleSheet(getCss());
     setFontPointSize(P_SIZE);
+    setTextInteractionFlags(
+        textInteractionFlags() |
+        Qt::LinksAccessibleByMouse |
+        Qt::LinksAccessibleByKeyboard
+    );
+    setOpenExternalLinks(true);
+    setReadOnly(false);
 }
 
 AppUI::TextBox::~TextBox() {
@@ -35,9 +45,9 @@ QString AppUI::TextBox::getCss() const noexcept {
     switch (mode)
     {
     case AppUI::Mode::DARK:
-        return CSS_TEMPLATE.arg(AppUI::Colours::VERY_DARK_GRAY, accent, AppUI::Colours::WHITE);
+        return CSS_TEMPLATE.arg(Colours::VERY_DARK_GRAY, accent, Colours::WHITE);
     default:
-        return CSS_TEMPLATE.arg(AppUI::Colours::WHITE, accent, AppUI::Colours::BLACK);
+        return CSS_TEMPLATE.arg(Colours::LIGHT_GRAY, accent, Colours::BLACK);
     } 
 }
 
@@ -147,8 +157,10 @@ void AppUI::TextBox::save() {
     }
 }
 
-void AppUI::TextBox::refreshContent(const long newNoteId) {
-    save();
+void AppUI::TextBox::refreshContent(const long newNoteId, bool writeBackContent) {
+    if (writeBackContent) {
+        save();
+    }
     currentNoteId = newNoteId;
     std::optional<AppBackend::Note> note {dao.loadRecord(newNoteId)};
     if (note == std::nullopt) {

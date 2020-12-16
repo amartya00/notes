@@ -59,7 +59,7 @@ namespace AppUI {
         );
 
         const AppUI::ActionBay& getToolbar() const noexcept;
-        void refreshContent(const long noteId);
+        void refreshContent(const long noteId, bool writeBackContent);
         
     signals:
         void noteSaved();

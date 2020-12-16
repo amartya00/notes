@@ -25,7 +25,7 @@ NoteSidebar::NoteSidebar(
     deleteButtonLight {buttons.at("DeleteButtonLight")},
     deleteButtonDark {buttons.at("DeleteButtonDark")},
     dao {dao},
-    notes {parent, dao, accent},
+    notes {parent, dao, mode, accent},
     toolbar {parent, generateToolbarStructs(), mode, accent} {
         addWidget(&notes);
         addWidget(&toolbar);
@@ -71,7 +71,7 @@ void NoteSidebar::connectInternal() noexcept {
             dao.upsertRecord(note);
             notes.updateView();
             notes.selectLast();
-            emit newNoteCreated(note.id);
+            emit newNoteCreated(note.id, true);
         });
     connect(
         &notes, 
@@ -79,18 +79,18 @@ void NoteSidebar::connectInternal() noexcept {
         &toolbar,
         [this](const QListWidgetItem* itm) {
             const AppUI::NoteListItem* listItm {reinterpret_cast<const AppUI::NoteListItem*>(itm)};
-            emit noteSelected(listItm->id);
+            emit noteSelected(listItm->id, true);
         });
     connect(
         &toolbar.getButton("delete"),
-        &QAction::triggered, 
+        &QAction::triggered,
         &notes,
         [this]() {
             notes.deleteSelected();
             createDefaultNoteIfEmpty();
             notes.updateView();
             notes.selectFirst();
-            emit noteDeleted(dao.listRecords()[0]);
+            emit noteDeleted(dao.listRecords()[0], false);
         });
 }
 

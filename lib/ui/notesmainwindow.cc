@@ -19,29 +19,24 @@
 #include <ui/itemlist.hpp>
 
 #include <backend/notesdao.hpp>
-#include <ui/mainwindow.hpp>
+#include <ui/notesmainwindow.hpp>
 #include <ui/models.hpp>
 
-void AppUI::MainWindow::connectTextBoxToolbar() noexcept {
+using AppUI::NotesMainWindow;
+using AppBackend::Note;
+
+void NotesMainWindow::connectTextBoxToolbar() noexcept {
     connect(&noteList, &NoteSidebar::noteSelected, &wordProcessor, &WordProcessor::refreshContent);
     connect(&noteList, &NoteSidebar::noteDeleted, &wordProcessor, &WordProcessor::refreshContent);
     connect(&noteList, &NoteSidebar::newNoteCreated, &wordProcessor, &WordProcessor::refreshContent);
     connect(&wordProcessor, &WordProcessor::noteSaved, &noteList, &NoteSidebar::updateView);
 }
 
-QString AppUI::MainWindow::getCss() const noexcept {
+QString NotesMainWindow::getCss() const noexcept {
     return CSS_TEMPLATE.arg(mode == AppUI::Mode::DARK ? AppUI::Colours::VERY_DARK_GRAY : AppUI::Colours::WHITE);
 }
 
-AppBackend::Note AppUI::MainWindow::newNote() const noexcept {
-    return AppBackend::Note {
-        dao.genRandomId(),
-        "Untitled note",
-        "Untitled note\n"
-    };
-}
-
-AppUI::MainWindow::MainWindow(
+AppUI::NotesMainWindow::NotesMainWindow(
     const std::size_t initWidth,
     const std::size_t initHeight,
     AppBackend::LocalDAO& dao,
@@ -56,7 +51,7 @@ AppUI::MainWindow::MainWindow(
         connectTextBoxToolbar();
         
         // Select the first note
-        wordProcessor.refreshContent(dao.listRecords()[0]);
+        wordProcessor.refreshContent(dao.listRecords()[0], false);
         
         mainGrid.addLayout(&noteList, 0, 0);
         mainGrid.addLayout(&wordProcessor, 0, 1);

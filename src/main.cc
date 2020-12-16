@@ -7,7 +7,7 @@
 #include <QSqlDatabase>
 #include <QFontDatabase>
 
-#include <ui/mainwindow.hpp>
+#include <ui/notesmainwindow.hpp>
 #include <backend/notesdao.hpp>
 
 namespace {
@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
     AppBackend::LocalDAO dao {getDatabase()};
     loadFonts();
     
-    AppUI::MainWindow window {700, 500, dao, AppUI::Mode::DARK, AppUI::Colours::PURPLE};
+    AppUI::NotesMainWindow window {700, 500, dao, AppUI::Mode::DARK, AppUI::Colours::BLUE};
     window.setWindowTitle("Notes");
     window.show();
     app.exec();

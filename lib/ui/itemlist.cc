@@ -5,17 +5,19 @@
 #include <ui/constants.hpp>
 
 namespace Colours = AppUI::Colours;
+using AppUI::Mode;
 using AppUI::ItemList;
 using AppUI::NoteListItem;
 using AppBackend::LocalDAO;
 using AppBackend::Note;
 
 QString ItemList::getCss() const noexcept {
-    return CSS_TEMPLATE.arg(accent, Colours::BLACK);
+    return CSS_TEMPLATE.arg(accent, Colours::BLACK, mode == Mode::DARK? Colours::WHITE : Colours::BLACK);
 }
 
-ItemList::ItemList(QWidget* parent, LocalDAO& dao, const QString accent): 
+ItemList::ItemList(QWidget* parent, LocalDAO& dao, const Mode mode, const QString accent): 
     QListWidget(parent),
+    mode {mode},
     accent {accent},
     dao {dao} {
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
@@ -50,6 +52,5 @@ void ItemList::deleteSelected() {
         long id {itm->id};
         dao.deleteRecord(id);
     }
-    updateView();
     selectFirst();
 }

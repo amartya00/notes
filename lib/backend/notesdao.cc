@@ -103,6 +103,7 @@ long AppBackend::LocalDAO::genRandomId() const noexcept {
 
 void AppBackend::LocalDAO::deleteRecord(const long id) {
     std::lock_guard<std::shared_mutex> writerLock(lock);
+    qWarning() << "Deleting record with id " << id;
     // Delete from the SQL database first
     QSqlQuery query;
     query.prepare(NotesTable::DELETE_NOTE_SQL_STRING);

@@ -16,10 +16,12 @@ namespace AppUI {
         const QString RED {"#ff0003"};
         const QString GRAY {"#3E3E3E"};
         const QString DARK_GRAY {"#2E2F30"};
+        const QString LIGHT_GRAY {"#DBDBDB"};
         const QString VERY_DARK_GRAY {"#202021"};
-        const QString BLUE {"#2B78FE"};
+        const QString BLUE {"#3E46FF"};
         const QString DARK_PINK {"#9D2689"};
         const QString WHITE {"#FFFFFF"};
+        const QString OFF_WHITE {"#EEEEEE"};
         const QString BLACK {"#000000"};
         const QString PURPLE {"#8B7DED"};
     }
