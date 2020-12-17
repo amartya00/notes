@@ -29,5 +29,3 @@ To run, you can execute the generated binary
 ```
 src/notes
 ```
-
-

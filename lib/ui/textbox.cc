@@ -150,6 +150,7 @@ void AppUI::TextBox::save() {
         dao.upsertRecord(
             AppBackend::Note {
                 *currentNoteId,
+                std::nullopt,
                 extractedTitle,
                 toHtml()
             }

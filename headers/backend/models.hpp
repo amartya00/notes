@@ -2,13 +2,14 @@
 #define __SIGABRT_NOTES__MODELS__
 
 #include <QString>
-#include <QTime>
+#include <QDateTime>
 
 #include <optional>
 
 namespace AppBackend {
     struct Note {
         long int id;
+        std::optional<QDateTime> createTime;
         QString title;
         QString body;
     };

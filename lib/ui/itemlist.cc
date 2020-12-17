@@ -30,7 +30,8 @@ void ItemList::updateView() noexcept {
     const std::vector<long>& items {dao.listRecords()};
     for (auto id : items) {
         Note note {std::move(*dao.loadRecord(id))};
-        addItem(new NoteListItem(note.id, note.title));
+        QString text = "<h2>%1</h2></br><p>%2";
+        addItem(new NoteListItem(note.id, text.arg(note.title, (*note.createTime).toString())));
     }
     setCurrentRow(current);
     update();

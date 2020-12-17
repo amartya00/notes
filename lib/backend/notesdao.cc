@@ -16,6 +16,8 @@
 #include <QSqlDriver>
 #include <QSqlError>
 #include <QSqlQuery>
+#include <QDateTime>
+#include <QVariant>
 
 #include <backend/models.hpp>
 
@@ -29,11 +31,18 @@ AppBackend::LocalDAO::LocalDAO(const QSqlDatabase& database): database {database
 
 void AppBackend::LocalDAO::initTable() {
     if(!database.tables().contains(NotesTable::TABLE_NAME)) {
-        QSqlQuery createQuery {NotesTable::CREATE_TABLE_SQL_STRING};
-        if (!createQuery.isActive()) {
+        QSqlQuery createQuery;
+        createQuery.prepare(NotesTable::CREATE_TABLE_SQL_STRING);
+        if (!createQuery.exec()) {
             qWarning() << "Failed to create table" << createQuery.lastError().text();
         } else {
             qWarning() << "Successfully created table";
+        }
+        createQuery.prepare(NotesTable::INDEX_CREATE_TIME);
+        if (!createQuery.exec()) {
+            qWarning() << "Failed to create index" << createQuery.lastError().text();
+        } else {
+            qWarning() << "Successfully created index";
         }
     }
 }
@@ -46,12 +55,13 @@ void AppBackend::LocalDAO::initCache() {
     } else {
         while (query.next()) {
             long id {static_cast<long>(query.value("id").toLongLong())};
+            QDateTime createTime {query.value("create_time").toDateTime()};
             QString title {query.value("title").toString()};
             QString body {query.value("body").toString()};
             qWarning() << "Loaded note with ID " << id;
 
             noteIdList.push_back(id);
-            noteMap.insert(std::make_pair(id, AppBackend::Note {id, title, body}));
+            noteMap.insert(std::make_pair(id, AppBackend::Note {id, createTime, title, body}));
         }
     }
 }
@@ -65,6 +75,9 @@ void AppBackend::LocalDAO::upsertRecord(const AppBackend::Note& note) {
     query.bindValue(":id", QVariant::fromValue(note.id));
     query.bindValue(":title", QVariant::fromValue(note.title));
     query.bindValue(":body", QVariant::fromValue(note.body));
+    if (note.createTime != std::nullopt) {
+        query.bindValue(":create_time", QVariant::fromValue(*note.createTime));
+    }
     if(!query.exec()) {
         qWarning() << "Failed to insert query with id " << note.id << " because " << query.lastError().text();
         throw std::runtime_error("Failed to insert query.");

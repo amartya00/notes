@@ -108,6 +108,7 @@ void NoteSidebar::createDefaultNoteIfEmpty() {
 Note NoteSidebar::newNote() const noexcept {
     return AppBackend::Note {
         dao.genRandomId(),
+        QDateTime::currentDateTime(),
         "Untitled note",
         "Untitled note\n"
     };

@@ -25,21 +25,25 @@ namespace AppBackend {
         
         const QString UPSERT_NOTE_SQL_STRING {
             "INSERT into notes "
-            "  (id, title, body, lut)"
+            "  (id, create_time, title, body, lut)"
             "VALUES"
-            "  ( :id, :title, :body, CURRENT_TIMESTAMP )"
+            "  ( :id, :create_time, :title, :body, CURRENT_TIMESTAMP )"
             "ON CONFLICT(id) DO UPDATE SET"
             "  title = :title, body = :body, lut = CURRENT_TIMESTAMP"
         };
         const QString CREATE_TABLE_SQL_STRING {
             "CREATE TABLE notes ("
             "  id BIGINT PRIMARY KEY, "
+            "  create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "
             "  title TEXT,"
             "  body TEXT,"
             "  lut TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
             ");"  
         };
-        const QString SELCT_ALL_SQL_STRING {"SELECT id,title,body FROM notes"};
+        const QString INDEX_CREATE_TIME {
+            "CREATE INDEX create_time ON notes (create_time)"
+        };
+        const QString SELCT_ALL_SQL_STRING {"SELECT id,create_time,title,body FROM notes"};
         const QString DELETE_NOTE_SQL_STRING {
             "DELETE FROM notes WHERE "
             "  id = :id"
